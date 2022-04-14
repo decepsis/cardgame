@@ -1,5 +1,6 @@
 package com.teamkoala;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -10,6 +11,7 @@ public class PlayingCards {
     private String suit; // Variable to hold the type of suit
     private int number; // Variable to hold the numeral value of the card
     private boolean faceDown; // Variable to see if the card is face down or not
+    private ArrayList<PlayingCards> deck;
 
     /**
      * Constructor for PlayingCard
@@ -21,6 +23,22 @@ public class PlayingCards {
         this.suit = suit;
         this.number = number;
         this.faceDown = faceDown;
+    }
+
+    public void deckOfCards() {
+        this.deck = new ArrayList<PlayingCards>(52);
+        for(int i = 1; i < 14; i++){
+            deck.add(new PlayingCards("Heart", i, true));
+        }
+        for(int i = 1; i < 14; i++){
+            deck.add(new PlayingCards("Diamond", i, true));
+        }
+        for(int i = 1; i < 14; i++){
+            deck.add(new PlayingCards("Spade", i, true));
+        }
+        for(int i = 1; i < 14; i++){
+            deck.add(new PlayingCards("Club", i, true));
+        }
     }
 
     /**
