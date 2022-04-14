@@ -62,7 +62,7 @@ public class CLIView extends View {
                 System.out.println("Column: ");
                 int col = input.nextInt();
 
-                player.hand[row][col] = deck.drawCard();
+                player.hand[row][col] = newCard;
             }
             else {
                 deck.discard(newCard);
