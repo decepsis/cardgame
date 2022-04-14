@@ -6,7 +6,6 @@ import java.util.Scanner;
  * CLIView which extends the View class to contain user inputs and outputs
  */
 public class CLIView extends View {
-    public PlayingCards pc;
     private Deck deck;
     private Player player;
     private Scanner input = new Scanner(System.in);
