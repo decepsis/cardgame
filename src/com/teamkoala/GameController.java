@@ -2,9 +2,6 @@ package com.teamkoala;
 
 import java.util.logging.Logger;
 
-// TODO: Lots of missing classes, replace them.
-class Player {}
-
 /**
  * Controls the game view and uses the appropriate models.
  *
@@ -33,7 +30,7 @@ public class GameController implements Controller {
         this.deck = new Deck(players);
 
         for (int i = 0; i < players; i++) {
-            this.players[i] = new Player();
+            this.players[i] = new Player(i + 1);
         }
     }
 
@@ -50,8 +47,7 @@ public class GameController implements Controller {
 
     @Override
     public boolean process() {
-
-
+        view.displayTurnStart(0, ""); // TODO: Stub
         return running;
     }
 }

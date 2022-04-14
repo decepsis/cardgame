@@ -1,10 +1,14 @@
 package com.teamkoala;
 
 class TestView implements View {
-    private final int numPlayers;
+    static class TraceException extends RuntimeException {}
 
-    public TestView(int numPlayers) {
+    private final int numPlayers;
+    private final boolean throwOnGame;
+
+    public TestView(int numPlayers, boolean throwOnGame) {
         this.numPlayers = numPlayers;
+        this.throwOnGame = throwOnGame;
     }
 
     @Override
@@ -17,6 +21,9 @@ class TestView implements View {
 
     @Override
     public int displayTurnStart(int player, String hand) {
+        if (throwOnGame)
+            throw new TraceException();
+
         throw new IllegalStateException("Not implemented");
     }
 }

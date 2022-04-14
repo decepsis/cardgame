@@ -37,6 +37,7 @@ public class CLIView implements View {
     @Override
     public int displayTurnStart(int playerTurn, String playerHand) {
         System.out.println(" Player " + playerTurn + "\'s turn. Player's hand: " + playerHand);
-        System.out.println("Last discarded card: " + deck.drawDiscard());
+        //System.out.println("Last discarded card: " + deck.drawDiscard());
+        return 0;
     }
 }

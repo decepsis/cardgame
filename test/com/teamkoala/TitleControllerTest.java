@@ -17,10 +17,9 @@ class TitleControllerTest {
      */
     @Test
     void startGame() {
-        TitleController ctrl = withParams(1);
+        TitleController ctrl = withParams(1, true);
 
-        // TODO: Bodged to work with partially complete TestView.
-        assertThrows(IllegalStateException.class, ctrl::process, "TitleController did not appear pass to GameController.");
+        assertThrows(TestView.TraceException.class, ctrl::process, "TitleController did not appear pass to GameController.");
     }
 
     /**
@@ -28,12 +27,12 @@ class TitleControllerTest {
      */
     @Test
     void exit() {
-        TitleController ctrl = withParams(0);
+        TitleController ctrl = withParams(0, false);
 
         assertFalse(ctrl.process(), "TitleController did not exit properly.");
     }
 
-    private TitleController withParams(int numPlayers) {
-        return new TitleController(new TestView(numPlayers));
+    private TitleController withParams(int numPlayers, boolean throwOnGame) {
+        return new TitleController(new TestView(numPlayers, throwOnGame));
     }
 }
