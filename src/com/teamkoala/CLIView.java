@@ -42,6 +42,9 @@ public class CLIView extends View {
         System.out.println("Last discarded card: " + deck.drawDiscard());
     }
 
+    /**
+     * Requests user input to either draw from pile or pick the last discarded card. The user is then prompted to either keep or discard the chosen card.
+     */
     // Story 5
     @Override
     public void drawCard() {
