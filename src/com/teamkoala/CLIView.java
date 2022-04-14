@@ -37,7 +37,7 @@ public class CLIView extends View {
     @Override
     public void displayTurnStart(int playerTurn, String playerHand) {
         System.out.println(" Player " + playerTurn + "\'s turn. Player's hand: " + playerHand);
-        System.out.println("Last discarded card: " + deck.drawDiscard());
+        System.out.println("Last discarded card: " + Deck.drawDiscard());
     }
 
     // Story 5
@@ -52,7 +52,13 @@ public class CLIView extends View {
             System.out.println("Press 1 to keep the card or Press 2 to discard it");
             int temp2 = input.nextInt();
             if (temp2 == 1) {
-                // replace card
+                System.out.println("Select the row and column of the card you want replaced");
+                System.out.println("Row: ");
+                int row = input.nextInt();
+                System.out.println("Column: ");
+                int col = input.nextInt();
+
+                Player.hand[row][col] = Deck.drawCard();
             }
             else {
                 Deck.discard();
@@ -60,6 +66,13 @@ public class CLIView extends View {
         }
         if (temp == 2) {
             // replace card
+            System.out.println("Select the row and column of the card you want replaced");
+            System.out.println("Row: ");
+            int row = input.nextInt();
+            System.out.println("Column: ");
+            int col = input.nextInt();
+
+            Player.hand[row][col] = Deck.drawDiscard();
         }
     }
 }
