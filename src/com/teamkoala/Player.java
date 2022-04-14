@@ -32,13 +32,13 @@ public class Player {
         }
         int row;
         int col;
-        for (int i = 0; i < 2; i++) {
+        /*for (int i = 0; i < 2; i++) {
             do {
                 row = rand.nextInt(3);
                 col = rand.nextInt(4);
             } while (!hand[row][col].faceDown);
             hand[row][col].setFaceUp();
-        }
+        }*/
 
     }
 
