@@ -6,6 +6,9 @@ import java.util.Scanner;
  * CLIView which extends the View class to contain user inputs and outputs
  */
 public class CLIView extends View {
+    private PlayingCards pc;
+    private Deck deck;
+    private Player player;
     private Scanner input = new Scanner(System.in);
 
     @Override
@@ -37,7 +40,7 @@ public class CLIView extends View {
     @Override
     public void displayTurnStart(int playerTurn, String playerHand) {
         System.out.println(" Player " + playerTurn + "\'s turn. Player's hand: " + playerHand);
-        System.out.println("Last discarded card: " + Deck.drawDiscard());
+        System.out.println("Last discarded card: " + deck.drawDiscard());
     }
 
     // Story 5
@@ -48,7 +51,7 @@ public class CLIView extends View {
         temp = input.nextInt();
         if (temp == 1) {
             // show card
-            System.out.println("The card drawn from the deck is: " + Deck.drawCard().PlayingCards.toString);
+            System.out.println("The card drawn from the deck is: " + deck.drawCard().PlayingCards.toString);
             System.out.println("Press 1 to keep the card or Press 2 to discard it");
             int temp2 = input.nextInt();
             if (temp2 == 1) {
@@ -58,10 +61,10 @@ public class CLIView extends View {
                 System.out.println("Column: ");
                 int col = input.nextInt();
 
-                Player.hand[row][col] = Deck.drawCard();
+                player.hand[row][col] = deck.drawCard();
             }
             else {
-                Deck.discard();
+                deck.discard();
             }
         }
         if (temp == 2) {
@@ -72,7 +75,7 @@ public class CLIView extends View {
             System.out.println("Column: ");
             int col = input.nextInt();
 
-            Player.hand[row][col] = Deck.drawDiscard();
+            player.hand[row][col] = deck.drawDiscard();
         }
     }
 }
