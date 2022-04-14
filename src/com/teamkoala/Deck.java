@@ -132,8 +132,10 @@ public class Deck {
      */
     //TODO: PlayingCards not implemented, reevaluate after implementation.
     private void addDeck() {
-        for (int suit = 1; suit < 5; suit++)
+        final String[] suits = {"Heart", "Diamond", "Spade", "Club"};
+
+        for (int suit = 0; suit < 4; suit++)
             for (int card = 1; card < 14; card++)
-                stock.add(new PlayingCards(suit, card));
+                stock.add(new PlayingCards(suits[suit], card, true));
     }
 }
