@@ -2,8 +2,6 @@ package com.teamkoala;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Enumeration;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -19,7 +17,7 @@ class TitleControllerTest {
     void startGame() {
         TitleController ctrl = withParams(1, true);
 
-        assertThrows(TestView.TraceException.class, ctrl::process, "TitleController did not appear pass to GameController.");
+        assertThrows(TraceException.class, ctrl::process, "TitleController did not appear pass to GameController.");
     }
 
     /**
@@ -28,11 +26,33 @@ class TitleControllerTest {
     @Test
     void exit() {
         TitleController ctrl = withParams(0, false);
-
         assertFalse(ctrl.process(), "TitleController did not exit properly.");
+
+        ctrl = withParams(1, false);
+        assertFalse(ctrl.process(), "TitleController did not exit from GameController properly.");
     }
 
+    /**
+     * Constructs a TitleController from a TestView easily for less typing.
+     *
+     * @param numPlayers Number of players to return to controller.
+     * @param throwOnGame Whether to throw or exit when entering GameController.
+     * @return New TitleController with specified view.
+     */
     private TitleController withParams(int numPlayers, boolean throwOnGame) {
-        return new TitleController(new TestView(numPlayers, throwOnGame));
+        return new TitleController(new TestView() {
+            @Override
+            public int getNumberOfPlayers() {
+                return numPlayers;
+            }
+
+            @Override
+            public int displayTurnStart(int player, String hand) {
+                if (throwOnGame)
+                    throw new TraceException();
+                else
+                    return 0;
+            }
+        });
     }
 }

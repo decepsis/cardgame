@@ -8,10 +8,20 @@ package com.teamkoala;
 public class TitleController implements Controller {
     private final View view;
 
+    /**
+     * Constructs a TitleController.
+     *
+     * @param view The view with which to display.
+     */
     public TitleController(View view) {
         this.view = view;
     }
 
+    /**
+     * Runs the title screen loop.
+     *
+     * @return If this program should continue running. Always false for TitleController.
+     */
     @Override
     public boolean process() {
         boolean running = true;

@@ -48,6 +48,6 @@ public class GameController implements Controller {
     @Override
     public boolean process() {
         view.displayTurnStart(0, ""); // TODO: Stub
-        return running;
+        return false;
     }
 }
