@@ -51,7 +51,7 @@ public class CLIView extends View {
         temp = input.nextInt();
         if (temp == 1) {
             // show card
-            System.out.println("The card drawn from the deck is: " + deck.drawCard().PlayingCards.toString);
+            System.out.println("The card drawn from the deck is: " + PlayingCards((deck.drawCard().toString());
             System.out.println("Press 1 to keep the card or Press 2 to discard it");
             int temp2 = input.nextInt();
             if (temp2 == 1) {
