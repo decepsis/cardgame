@@ -6,7 +6,7 @@ import java.util.Scanner;
  * CLIView which extends the View class to contain user inputs and outputs
  */
 public class CLIView extends View {
-    private PlayingCards pc;
+    public PlayingCards pc;
     private Deck deck;
     private Player player;
     private Scanner input = new Scanner(System.in);
@@ -51,7 +51,8 @@ public class CLIView extends View {
         temp = input.nextInt();
         if (temp == 1) {
             // show card
-            System.out.println("The card drawn from the deck is: " + PlayingCards((deck.drawCard().toString());
+            PlayingCards newCard = deck.drawCard();
+            System.out.println("The card drawn from the deck is: " + newCard);
             System.out.println("Press 1 to keep the card or Press 2 to discard it");
             int temp2 = input.nextInt();
             if (temp2 == 1) {
@@ -64,7 +65,7 @@ public class CLIView extends View {
                 player.hand[row][col] = deck.drawCard();
             }
             else {
-                deck.discard();
+                deck.discard(newCard);
             }
         }
         if (temp == 2) {
