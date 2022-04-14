@@ -4,7 +4,6 @@ import java.util.logging.Logger;
 
 // TODO: Lots of missing classes, replace them.
 class Player {}
-class View {}
 
 /**
  * Controls the game view and uses the appropriate models.
@@ -19,6 +18,7 @@ public class GameController implements Controller {
     final Deck deck;
 
     int activePlayer = 0;
+    private boolean running = true;
 
     /**
      * Creates a new GameController from a given GameView and number of players.
@@ -37,10 +37,21 @@ public class GameController implements Controller {
         }
     }
 
+    public void exit() {
+        running = false;
+    }
+
     /**
      * Advances to the next turn, for internal use.
      */
     private void nextTurn() {
         activePlayer++;
+    }
+
+    @Override
+    public boolean process() {
+
+
+        return running;
     }
 }

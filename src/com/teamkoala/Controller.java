@@ -1,3 +1,5 @@
 package com.teamkoala;
 
-public interface Controller {}
+public interface Controller {
+    boolean process();
+}

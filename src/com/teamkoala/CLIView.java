@@ -5,16 +5,16 @@ import java.util.Scanner;
 /**
  * CLIView which extends the View class to contain user inputs and outputs
  */
-public class CLIView extends View {
+public class CLIView implements View {
     private Scanner input = new Scanner(System.in);
 
     @Override
-    void showStartScreen() {
+    public void showStartScreen() {
         System.out.println("~~~~~~~~~~~~Welcome to the game!~~~~~~~~~~~~");
     }
 
     @Override
-    int getNumberOfPlayers(){
+    public int getNumberOfPlayers(){
         int num = 0;
         System.out.print("Enter the number of players(min. 2 & max. 8: ");
         int num1 = input.nextInt();
