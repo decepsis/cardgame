@@ -47,11 +47,11 @@ class TitleControllerTest {
             }
 
             @Override
-            public int displayTurnStart(int player, String hand) {
+            public int drawCard(boolean stockHasCards, boolean discardHasCards) {
                 if (throwOnGame)
                     throw new TraceException();
-                else
-                    return 0;
+
+                return 0;
             }
         });
     }
