@@ -66,15 +66,19 @@ class GameControllerTest {
      */
     @Test
     void flip() throws NoSuchFieldException, IllegalAccessException {
-        GameController ctrl = fromArrays(new int[]{ 1, 1, 0 }, new boolean[]{ false }, new int[]{}, new int[]{ -1, 0 });
+        GameController ctrl = fromArrays(new int[]{ 1, 1, 0 }, new boolean[]{ false }, new int[]{}, new int[]{ -1, 1, 0 });
 
         Player[] players = getField(ctrl, "players");
-        PlayingCards secondCard = players[1].hand[0][0];
-        secondCard.setFaceDown();
+        PlayingCards firstCard = players[1].hand[0][0];
+        firstCard.setFaceDown();
+
+        PlayingCards secondCard = players[1].hand[0][1];
+        secondCard.setFaceUp();
 
         // Note: -1 should either error for one of several reasons if not handled correctly, we can detect the throw.
+        // Additionally, if GameController does not correctly retry after the second card is already flipped, it will not flip the first.
         assertFalse(ctrl.process(), "GameController did not correctly exit when testing flip.");
-        assertFalse(secondCard.faceDown, "GameController did not correctly flip second player's card.");
+        assertFalse(firstCard.faceDown, "GameController did not correctly flip second player's card.");
     }
 
     /**
@@ -116,7 +120,7 @@ class GameControllerTest {
             }
 
             @Override
-            public int askFlip() {
+            public int askFlip(boolean wasFlipped) {
                 int ret = flipReturn[flipIndex++];
                 flipIndex %= flipReturn.length;
 

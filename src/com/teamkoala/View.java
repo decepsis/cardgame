@@ -55,7 +55,8 @@ public interface View {
     /**
      * Asks the player if they want to flip a card over.
      *
+     * @param wasFlipped If the player chose a flipped card, and we need another.
      * @return Card the player would like to flip over or -1.
      */
-    int askFlip();
+    int askFlip(boolean wasFlipped);
 }

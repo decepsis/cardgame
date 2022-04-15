@@ -102,18 +102,26 @@ public class GameController implements Controller {
             } else {
                 deck.discard(drawn);
 
-                final int index = view.askFlip();
+                while (true) {
+                    final int index = view.askFlip(false);
 
-                if (index > 5 || index < -1) {
-                    logger.warning("Impossible value returned from the view.");
-                    return true;
-                }
+                    if (index == -1)
+                        break;
 
-                if (index != -1) {
+                    if (index > 5 || index < -1) {
+                        logger.warning("Impossible value returned from the view.");
+                        return true;
+                    }
+
                     final int row = index / 3;
                     final int col = index % 3;
 
-                    players[activePlayer].hand[row][col].setFaceUp();
+                    PlayingCards card = players[activePlayer].hand[row][col];
+
+                    if (card.faceDown) {
+                        players[activePlayer].hand[row][col].setFaceUp();
+                        break;
+                    }
                 }
             }
 

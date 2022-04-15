@@ -153,8 +153,12 @@ public class CLIView implements View {
      * @return Card the player would like to flip over or -1.
      */
     @Override
-    public int askFlip() {
+    public int askFlip(boolean wasFlipped) {
+        if (wasFlipped)
+            System.out.println("That card is already flipped.");
+
         System.out.println("You may flip a card over. Enter the row or 0 to skip:");
+
         int row = input.nextInt();
         while (row > 2 || row < 0) {
             System.out.println("Please select a row between 1 and 2.");

@@ -301,6 +301,7 @@ class CLIViewTest {
         final String colQuery = "Column: ";
         final String rowError = "Please select a row between 1 and 2.";
         final String colError = "Please select a column between 1 and 3.";
+        final String wasFlipped = "That card is already flipped.";
 
         final String[] expected = {
                 query,
@@ -313,6 +314,7 @@ class CLIViewTest {
                 colQuery,
                 query,
                 colQuery,
+                wasFlipped,
                 query,
                 ""
         };
@@ -325,27 +327,27 @@ class CLIViewTest {
         printer.println("0");
         printer.println("4");
         printer.println("1");
-        int value = assertTimeoutPreemptively(Duration.ofMillis(100), view::askFlip, "askFlip did not return first value.");
+        int value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.askFlip(false), "askFlip did not return first value.");
         assertEquals(0, value, "askFlip did not correctly return first value.");
 
         fixPipe();
 
         printer.println("2");
         printer.println("3");
-        value = assertTimeoutPreemptively(Duration.ofMillis(100), view::askFlip, "askFlip did not return second value.");
+        value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.askFlip(false), "askFlip did not return second value.");
         assertEquals(5, value, "askFlip did not correctly return second value.");
 
         fixPipe();
 
         printer.println("1");
         printer.println("2");
-        value = assertTimeoutPreemptively(Duration.ofMillis(100), view::askFlip, "askFlip did not return third value.");
+        value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.askFlip(false), "askFlip did not return third value.");
         assertEquals(1, value, "askFlip did not correctly return third value.");
 
         fixPipe();
 
         printer.println("0");
-        value = assertTimeoutPreemptively(Duration.ofMillis(100), view::askFlip, "askFlip did not return the skip value.");
+        value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.askFlip(true), "askFlip did not return the skip value.");
         assertEquals(-1, value, "askFlip did not correctly return the skip value.");
 
         assertEquals(String.join(String.format("%n"), expected), fakeOut.toString(), "askFlip did not output correctly.");

@@ -33,7 +33,7 @@ class TestView implements View {
     }
 
     @Override
-    public int askFlip() {
+    public int askFlip(boolean wasFlipped) {
         throw new IllegalStateException("TestView does not use this method");
     }
 }
