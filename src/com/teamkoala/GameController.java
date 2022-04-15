@@ -1,5 +1,6 @@
 package com.teamkoala;
 
+import java.util.NoSuchElementException;
 import java.util.logging.Logger;
 
 /**
@@ -56,16 +57,21 @@ public class GameController implements Controller {
             boolean discard = false;
             boolean keep = true;
 
-            switch (view.drawCard()) {  // TODO: Ensure stock/discard has cards.
-                case 0 -> {
-                    running = false;
-                    continue; // Exit
+            try {
+                switch (view.drawCard(deck.stockSize() > 0, deck.discardSize() > 0)) {  // TODO: Ensure stock/discard has cards.
+                    case 0 -> {
+                        running = false;
+                        continue; // Exit
+                    }
+                    case 1 -> drawn = deck.drawCard();
+                    case 2 -> {
+                        drawn = deck.drawDiscard();
+                        discard = true;
+                    }
                 }
-                case 1 -> drawn = deck.drawCard();
-                case 2 -> {
-                    drawn = deck.drawDiscard();
-                    discard = true;
-                }
+            } catch (NoSuchElementException e) {
+                logger.warning("View returned a value not allowed due to pile sizes.");
+                return true;
             }
 
             if (drawn == null) {

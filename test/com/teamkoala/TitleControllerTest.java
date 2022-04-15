@@ -47,7 +47,7 @@ class TitleControllerTest {
             }
 
             @Override
-            public int drawCard() {
+            public int drawCard(boolean stockHasCards, boolean discardHasCards) {
                 if (throwOnGame)
                     throw new TraceException();
 

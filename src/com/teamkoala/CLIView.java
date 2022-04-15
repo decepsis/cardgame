@@ -58,19 +58,42 @@ public class CLIView implements View {
     }
 
     /**
-     * Requests user input to either draw from pile or pick the last discarded card. The user is then prompted to either keep or discard the chosen card.
+     * Asks the player where to draw a card from.
      *
-     * @return 1 for stock, 2 for discard, 3 for exit.
+     * @param stockHasCards If the stock pile has cards (can be drawn.)
+     * @param discardHasCards If the discard pile has cards (can be drawn.)
+     * @return 1 for stock, 2 for discard, 0 for exit.
      */
     // Story 5
     @Override
-    public int drawCard() {
-        int temp;
-        System.out.println("Press 1 to draw a card from the draw pile or 2 to draw the last discarded card, or 0 to exit.");
-        temp = input.nextInt();
-        while (temp != 1 && temp != 2 && temp != 0) {
-            System.out.println("Please only input 1, 2, or 0");
+    public int drawCard(boolean stockHasCards, boolean discardHasCards) {
+        int temp = 0;
+
+        if (stockHasCards && !discardHasCards) {
+            System.out.println("Press 1 to draw a card from the stock pile or 0 to exit.");
+
             temp = input.nextInt();
+            while (temp != 1 && temp != 0) {
+                System.out.println("Please only input 1 or 0");
+                temp = input.nextInt();
+            }
+        } else if (!stockHasCards && discardHasCards) {
+            System.out.println("Press 2 to draw the last discarded card or 0 to exit.");
+
+            temp = input.nextInt();
+            while (temp != 2 && temp != 0) {
+                System.out.println("Please only input 2 or 0");
+                temp = input.nextInt();
+            }
+        } else if (!stockHasCards)
+            System.out.println("There are no more cards left, we have to exit, sorry.");
+        else {
+            System.out.println("Press 1 to draw a card from the stock pile, 2 to draw the last discarded card, or 0 to exit.");
+            temp = input.nextInt();
+            while (temp != 1 && temp != 2 && temp != 0) {
+                System.out.println("Please only input 1, 2, or 0");
+                temp = input.nextInt();
+            }
         }
 
         return temp;

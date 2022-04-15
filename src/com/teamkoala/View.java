@@ -29,10 +29,12 @@ public interface View {
     /**
      * Asks the player where to draw a card from.
      *
+     * @param stockHasCards If the stock pile has cards (can be drawn.)
+     * @param discardHasCards If the discard pile has cards (can be drawn.)
      * @return 1 for stock, 2 for discard, 0 for exit.
      */
     // Story 5
-    int drawCard();
+    int drawCard(boolean stockHasCards, boolean discardHasCards);
 
     /**
      * Asks the player which card they want to replace.

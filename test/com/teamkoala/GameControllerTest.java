@@ -17,8 +17,9 @@ class GameControllerTest {
      */
     @Test
     void invalid() {
-        GameController ctrl = fromArrays(new int[]{ 3, 1, 1 }, new boolean[]{ true, true }, new int[]{ -1, 6 });
+        GameController ctrl = fromArrays(new int[]{ 2, 3, 1, 1 }, new boolean[]{ true, true }, new int[]{ -1, 6 });
 
+        assertTrue(ctrl.process(), "GameController did not correctly error when asked to draw from empty pile.");
         assertTrue(ctrl.process(), "GameController did not correctly error when given invalid draw decision.");
         assertTrue(ctrl.process(), "GameController did not correctly error when given too small a hand index.");
         assertTrue(ctrl.process(), "GameController did not correctly error when given too big a hand index.");
@@ -72,7 +73,7 @@ class GameControllerTest {
             private int returnIndex = 0;
 
             @Override
-            public int drawCard() {
+            public int drawCard(boolean stockHasCards, boolean discardHasCards) {
                 int ret = drawReturn[drawIndex++];
                 drawIndex %= drawReturn.length;
 
