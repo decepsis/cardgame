@@ -1,7 +1,5 @@
 package com.teamkoala;
 
-import java.util.Objects;
-
 /**
  * Playing Card Object
  * Version: 1.0
@@ -12,10 +10,10 @@ public class PlayingCards {
     public boolean faceDown; // Variable to see if the card is face down or not
 
     /**
-     * Constructor for PlayingCard
-     * @param suit
-     * @param number
-     * @param faceDown
+     * Constructor for PlayingCard.
+     * @param suit Suit of the card.
+     * @param number Face value of the card.
+     * @param faceDown If the card is face down.
      */
     public PlayingCards(String suit, int number, boolean faceDown) {
         this.suit = suit;
@@ -25,18 +23,18 @@ public class PlayingCards {
 
     /**
      * Method to check if the suit is red
-     * @return
+     * @return If the card suit is red.
      */
     public boolean isRed() {
-        return Objects.equals(suit, "Diamond") || Objects.equals(suit, "Heart");
+        return suit.equals("Diamond") || suit.equals("Heart");
     }
 
     /**
      * Method to check if the suit is black
-     * @return
+     * @return If the card suit is black.
      */
     public boolean isBlack() {
-        return !Objects.equals(suit, "Diamond") && !Objects.equals(suit, "Heart");
+        return suit.equals("Club") || suit.equals("Spade");
     }
 
     /**
