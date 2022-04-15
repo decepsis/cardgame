@@ -1,6 +1,5 @@
 package com.teamkoala;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -8,10 +7,9 @@ import java.util.Objects;
  * Version: 1.0
  */
 public class PlayingCards {
-    private String suit; // Variable to hold the type of suit
-    private int number; // Variable to hold the numeral value of the card
-    private boolean faceDown; // Variable to see if the card is face down or not
-    private ArrayList<PlayingCards> deck;
+    private final String suit; // Variable to hold the type of suit
+    private final int number; // Variable to hold the numeral value of the card
+    public boolean faceDown; // Variable to see if the card is face down or not
 
     /**
      * Constructor for PlayingCard
@@ -25,33 +23,12 @@ public class PlayingCards {
         this.faceDown = faceDown;
     }
 
-    public void deckOfCards() {
-        this.deck = new ArrayList<PlayingCards>(52);
-        for(int i = 1; i < 14; i++){
-            deck.add(new PlayingCards("Heart", i, true));
-        }
-        for(int i = 1; i < 14; i++){
-            deck.add(new PlayingCards("Diamond", i, true));
-        }
-        for(int i = 1; i < 14; i++){
-            deck.add(new PlayingCards("Spade", i, true));
-        }
-        for(int i = 1; i < 14; i++){
-            deck.add(new PlayingCards("Club", i, true));
-        }
-    }
-
     /**
      * Method to check if the suit is red
      * @return
      */
     public boolean isRed() {
-        if (Objects.equals(suit, "Diamond") || Objects.equals(suit, "Heart")) {
-            return true;
-        }
-        else{
-            return false;
-        }
+        return Objects.equals(suit, "Diamond") || Objects.equals(suit, "Heart");
     }
 
     /**
@@ -59,17 +36,12 @@ public class PlayingCards {
      * @return
      */
     public boolean isBlack() {
-        if (Objects.equals(suit, "Diamond") || Objects.equals(suit, "Heart")) {
-            return false;
-        }
-        else{
-            return true;
-        }
+        return !Objects.equals(suit, "Diamond") && !Objects.equals(suit, "Heart");
     }
 
     /**
      * Getter for the card number
-     * @return
+     * @return Face value of card.
      */
     public int getCardNumber(){
         return this.number;
@@ -84,7 +56,6 @@ public class PlayingCards {
 
     /**
      * Setter to set the card face down
-     * @return
      */
     public void setFaceDown(){
         this.faceDown = true;
@@ -92,22 +63,18 @@ public class PlayingCards {
 
     /**
      * Method to return if a card is face card or not
-     * @return
+     * @return If the card is a face card.
      */
-    public boolean isFaceCard(){
-        if(number == 11 || number == 12 || number == 13){
-            return true;
-        }
-
-        return false;
+    public boolean isFaceCard() {
+        return number == 11 || number == 12 || number == 13;
     }
 
     /**
      * toString method that returns the string of a card
-     * @return
+     * @return String value of the card.
      */
     public String toString() {
-        if (this.faceDown == true) {
+        if (this.faceDown) {
             return "Face down";
         } else {
             if (this.number == 1) {
@@ -129,9 +96,9 @@ public class PlayingCards {
 
     /**
      * Method that returns the score of the card
-     * @return
+     * @return Game value of the card.
      */
-    public int getCardScore(){
+    public int getCardScore() {
         if(this.number == 1) {
             return 1;
         }

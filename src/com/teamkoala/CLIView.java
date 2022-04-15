@@ -42,15 +42,85 @@ public class CLIView implements View {
 
     /**
      * Displays current player's turn, their current hand and the last discarded card
-     * @param playerTurn
-     * @param playerHand
-     * @return
+     * @param playerTurn Number of the current player.
+     * @param playerHand String version of the player's hand.
+     * @param lastDiscard Last discarded card or null if there is none.
      */
     //Story 4
     @Override
-    public int displayTurnStart(int playerTurn, String playerHand) {
-        System.out.println(" Player " + playerTurn + "\'s turn. Player's hand: " + playerHand);
-        //System.out.println("Last discarded card: " + deck.drawDiscard());
-        return 0;
+    public void displayTurnStart(int playerTurn, String playerHand, PlayingCards lastDiscard) {
+        System.out.println("Player " + playerTurn + "'s turn. Player's hand: " + playerHand);
+
+        if (lastDiscard != null)
+            System.out.println("Last discarded card: " + lastDiscard);
+        else
+            System.out.println("Discard is empty");
+    }
+
+    /**
+     * Requests user input to either draw from pile or pick the last discarded card. The user is then prompted to either keep or discard the chosen card.
+     *
+     * @return 1 for stock, 2 for discard, 3 for exit.
+     */
+    // Story 5
+    @Override
+    public int drawCard() {
+        int temp;
+        System.out.println("Press 1 to draw a card from the draw pile or 2 to draw the last discarded card, or 0 to exit.");
+        temp = input.nextInt();
+        while (temp != 1 && temp != 2 && temp != 0) {
+            System.out.println("Please only input 1, 2, or 0");
+            temp = input.nextInt();
+        }
+
+        return temp;
+    }
+
+    /**
+     * Asks the player which card they want to replace.
+     *
+     * @param drawn Card that was drawn.
+     * @return 0-based index of the hand.
+     */
+    @Override
+    public boolean askKeep(PlayingCards drawn) {
+        System.out.println("The card drawn from the deck is: " + drawn);
+        System.out.println("Press 1 to keep the card or 2 to discard it");
+
+        int temp = input.nextInt();
+        while (temp != 1 && temp != 2) {
+            System.out.println("Please only input 1 or 2.");
+            temp = input.nextInt();
+        }
+
+        return temp == 1;
+    }
+
+    /**
+     * Asks the player if they want to keep the card.
+     *
+     * @param drawn Unused, as we don't print here.
+     * @return If the player keeps the card.
+     */
+    @Override
+    public int askReplace(PlayingCards drawn) {
+        System.out.println("Select the row and column of the card you want replaced.");
+        System.out.println("Row: ");
+        int row = input.nextInt();
+
+        while (row > 2 || row < 1) {
+            System.out.println("Please select a row between 1 and 2.");
+            row = input.nextInt();
+        }
+
+        System.out.println("Column: ");
+        int col = input.nextInt();
+
+        while (col > 3 || col < 1) {
+            System.out.println("Please select a column between 1 and 3.");
+            col = input.nextInt();
+        }
+
+        return (col - 1) + ((row - 1) *  3);
     }
 }

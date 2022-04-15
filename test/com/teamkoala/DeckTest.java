@@ -84,6 +84,19 @@ public class DeckTest {
     }
 
     /**
+     * Tests the peekDiscard() function, which is very similar to drawDiscard().
+     */
+    @Test
+    void peekDiscard() {
+        final PlayingCards discarded = deck.drawCard();
+        deck.discard(deck.drawCard());
+        deck.discard(discarded);
+
+        assertEquals(discarded, deck.peekDiscard(), "peekDiscard did not return the last discarded card.");
+        assertEquals(discarded, deck.peekDiscard(), "peekDiscard returned a different card, suggesting it removed the last one.");
+    }
+
+    /**
      * Tests the discard() function, doing, not much. Mostly for isolation.
      */
     @Test

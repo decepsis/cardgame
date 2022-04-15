@@ -1,9 +1,8 @@
-package csc439team7.cardgame;
+package com.teamkoala;
 
 /**
  * Holds driver for the cardgame application.
  *
- * @author Tyler Kuhn
  * @version Lab 4
  */
 public class Main {
@@ -13,7 +12,6 @@ public class Main {
      * Currently empty as there is nothing to run.
      *
      * @param args Command line arguments
-     * @author Tyler Kuhn
      */
     public static void main(String[] args) {}
 }

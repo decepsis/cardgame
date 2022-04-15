@@ -15,7 +15,20 @@ class TestView implements View {
     }
 
     @Override
-    public int displayTurnStart(int player, String hand) {
+    public void displayTurnStart(int player, String hand, PlayingCards lastDiscard) {}
+
+    @Override
+    public int drawCard() {
+        throw new IllegalStateException("TestView does not use this method");
+    }
+
+    @Override
+    public int askReplace(PlayingCards drawn) {
+        throw new IllegalStateException("TestView does not use this method");
+    }
+
+    @Override
+    public boolean askKeep(PlayingCards drawn) {
         throw new IllegalStateException("TestView does not use this method");
     }
 }

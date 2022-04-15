@@ -65,7 +65,7 @@ class CLIViewTest {
     void showStartScreen() {
         view.showStartScreen();
 
-        assertEquals("~~~~~~~~~~~~Welcome to the game!~~~~~~~~~~~~", fakeOut.toString().trim(),
+        assertEquals(String.format("~~~~~~~~~~~~Welcome to the game!~~~~~~~~~~~~%n"), fakeOut.toString(),
                 "Unexpected title message, investigate and/or update the test.");
     }
 
@@ -114,5 +114,152 @@ class CLIViewTest {
 
         // Now test output
         assertEquals(expectedStr, fakeOut.toString(), "Expected output mismatch.");
+    }
+
+    /**
+     * Tests the output of displayTurnStart().
+     */
+    @Test
+    void displayTurnStart() {
+        final String format = "Player %d's turn. Player's hand: %s%n";
+        final String discardFormat = "Last discarded card: %s%n";
+        final String emptyDiscard = String.format("Discard is empty%n");
+
+        view.displayTurnStart(999, "fakehand1", null);
+
+        PlayingCards card = new PlayingCards("Heart", 6, false);
+
+        view.displayTurnStart(998, "fakehand2", card);
+
+        final String[] expected = {
+                String.format(format, 999, "fakehand1"),
+                emptyDiscard,
+                String.format(format, 998, "fakehand2"),
+                String.format(discardFormat, card)
+        };
+
+        assertEquals(String.join("", expected), fakeOut.toString(), "displayTurnStart did not correctly output.");
+    }
+
+    /**
+     * Tests the drawCard() I/O.
+     */
+    @Test
+    void drawCard() throws IOException, NoSuchFieldException, IllegalAccessException {
+        final String query = "Press 1 to draw a card from the draw pile or 2 to draw the last discarded card, or 0 to exit.";
+        final String error = "Please only input 1, 2, or 0";
+        final String[] expected = { query, error, query, query, error, "" };
+
+        printer.println("-1");
+        printer.println("0");
+        int value = assertTimeoutPreemptively(Duration.ofMillis(50), view::drawCard, "drawCard did not return first value.");
+        assertEquals(0, value, "drawCard did not correctly return first value.");
+
+        fixPipe();
+
+        printer.println("1");
+        value = assertTimeoutPreemptively(Duration.ofMillis(50), view::drawCard, "drawCard did not return second value.");
+        assertEquals(1, value, "drawCard did not correctly return second value.");
+
+        fixPipe();
+
+        printer.println("3");
+        printer.println("2");
+        value = assertTimeoutPreemptively(Duration.ofMillis(50), view::drawCard, "drawCard did not return third value.");
+        assertEquals(2, value, "drawCard did not correctly return third value.");
+
+        assertEquals(String.join(String.format("%n"), expected), fakeOut.toString(), "drawCard did not output correctly.");
+    }
+
+    /**
+     * Tests the askKeep() I/O.
+     */
+    @Test
+    void askKeep() throws IOException, NoSuchFieldException, IllegalAccessException {
+        final String drawnFormat = "The card drawn from the deck is: %s";
+        final String query = "Press 1 to keep the card or 2 to discard it";
+        final String error = "Please only input 1 or 2.";
+
+        final PlayingCards card1 = new PlayingCards("Heart", 6, false);
+        final PlayingCards card2 = new PlayingCards("Club", 8, false);
+
+        final String[] expected = {
+                String.format(drawnFormat, card1),
+                query,
+                error,
+                String.format(drawnFormat, card2),
+                query,
+                error,
+                ""
+        };
+
+        printer.println("0");
+        printer.println("1");
+        boolean value = assertTimeoutPreemptively(Duration.ofMillis(50), () -> view.askKeep(card1), "drawCard did not return first value.");
+        assertTrue(value, "drawCard did not correctly return first value.");
+
+        fixPipe();
+
+        printer.println("3");
+        printer.println("2");
+        value = assertTimeoutPreemptively(Duration.ofMillis(50), () -> view.askKeep(card2), "drawCard did not return second value.");
+        assertFalse(value, "drawCard did not correctly return second value.");
+
+        assertEquals(String.join(String.format("%n"), expected), fakeOut.toString(), "drawCard did not output correctly.");
+    }
+
+    /**
+     * Tests the askReplace() I/O.
+     */
+    @Test
+    void askReplace() throws IOException, NoSuchFieldException, IllegalAccessException {
+        final String query = "Select the row and column of the card you want replaced.";
+        final String rowQuery = "Row: ";
+        final String colQuery = "Column: ";
+        final String rowError = "Please select a row between 1 and 2.";
+        final String colError = "Please select a column between 1 and 3.";
+        final String[] expected = {
+                query,
+                rowQuery,
+                rowError,
+                rowError,
+                colQuery,
+                colError,
+                colError,
+                query,
+                rowQuery,
+                colQuery,
+                query,
+                rowQuery,
+                colQuery,
+                ""
+        };
+
+        final PlayingCards card = new PlayingCards("Heart", 6, false);
+
+        printer.println("0");
+        printer.println("3");
+        printer.println("1");
+        printer.println("0");
+        printer.println("4");
+        printer.println("1");
+        int value = assertTimeoutPreemptively(Duration.ofMillis(50), () -> view.askReplace(card), "askReplace did not return first value.");
+        assertEquals(0, value, "askReplace did not correctly return first value.");
+
+        fixPipe();
+
+        printer.println("2");
+        printer.println("3");
+        value = assertTimeoutPreemptively(Duration.ofMillis(50), () -> view.askReplace(card), "askReplace did not return second value.");
+        assertEquals(5, value, "askReplace did not correctly return second value.");
+
+        fixPipe();
+
+        printer.println("1");
+        printer.println("2");
+        value = assertTimeoutPreemptively(Duration.ofMillis(50), () -> view.askReplace(card), "askReplace did not return third value.");
+        assertEquals(1, value, "askReplace did not correctly return third value.");
+
+        assertEquals(String.join(String.format("%n"), expected), fakeOut.toString(), "askReplace did not output correctly.");
     }
 }

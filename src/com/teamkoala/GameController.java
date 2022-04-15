@@ -8,13 +8,13 @@ import java.util.logging.Logger;
  * @version Lab 6
  */
 public class GameController implements Controller {
-    final static Logger logger = Logger.getLogger("Koala-Golf");
+    private final static Logger logger = Logger.getLogger("Koala-Golf");
 
-    final View view;
-    final Player[] players;
-    final Deck deck;
+    private final View view;
+    private final Player[] players;
+    private final Deck deck;
 
-    int activePlayer = 0;
+    private int activePlayer = 0;
     private boolean running = true;
 
     /**
@@ -27,15 +27,11 @@ public class GameController implements Controller {
         this.view = view;
         this.players = new Player[players];
 
-        this.deck = new Deck(players);
+        deck = new Deck(players);
 
         for (int i = 0; i < players; i++) {
-            this.players[i] = new Player(i + 1);
+            this.players[i] = new Player(deck);
         }
-    }
-
-    public void exit() {
-        running = false;
     }
 
     /**
@@ -43,11 +39,66 @@ public class GameController implements Controller {
      */
     private void nextTurn() {
         activePlayer++;
+        activePlayer %= players.length;
     }
 
+    /**
+     * Performs game play loop.
+     * @return If the program should continue running.
+     */
     @Override
     public boolean process() {
-        view.displayTurnStart(0, ""); // TODO: Stub
+        while (running) { // Each iteration is a turn
+            PlayingCards lastDiscard = deck.discardSize() != 0 ? deck.peekDiscard() : null;
+            view.displayTurnStart(activePlayer + 1, "", lastDiscard); // TODO: Stub
+
+            PlayingCards drawn = null;
+            boolean discard = false;
+            boolean keep = true;
+
+            switch (view.drawCard()) {
+                case 0 -> {
+                    running = false;
+                    continue; // Exit
+                }
+                case 1 -> drawn = deck.drawCard();
+                case 2 -> {
+                    drawn = deck.drawDiscard();
+                    discard = true;
+                }
+            }
+
+            if (drawn == null) {
+                logger.warning("Impossible value returned from the view.");
+                return true;
+            }
+
+            drawn.setFaceUp();
+
+            if (!discard)
+                keep = view.askKeep(drawn);
+
+            if (keep) {
+                final int index = view.askReplace(drawn);
+                if (index > 5 || index < 0) {
+                    logger.warning("Impossible value returned from the view.");
+                    return true;
+                }
+
+                final int row = index / 3;
+                final int col = index % 3;
+
+                PlayingCards last = players[activePlayer].hand[row][col];
+                players[activePlayer].hand[row][col] = drawn;
+
+                last.setFaceUp();
+                deck.discard(last);
+            } else
+                deck.discard(drawn);
+
+            nextTurn();
+        }
+
         return false;
     }
 }

@@ -17,6 +17,11 @@ public class Deck {
     static final SecureRandom seeder; // Slightly unnecessary.
     static Logger logger = Logger.getLogger("Koala-Golf");
 
+    /*
+     * Initializes the seeder for the generators.
+     *
+     * Basically impossible to test.
+     */
     static {
         SecureRandom temp;
 
@@ -96,6 +101,15 @@ public class Deck {
      */
     public void discard(PlayingCards card) {
         discard.push(card);
+    }
+
+    /**
+     * Returns the last discard without drawing it.
+     *
+     * @return The last discarded card.
+     */
+    public PlayingCards peekDiscard() {
+        return discard.peek();
     }
 
     /**
