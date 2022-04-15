@@ -50,13 +50,13 @@ public class GameController implements Controller {
     public boolean process() {
         while (running) { // Each iteration is a turn
             PlayingCards lastDiscard = deck.discardSize() != 0 ? deck.peekDiscard() : null;
-            view.displayTurnStart(activePlayer + 1, "", lastDiscard); // TODO: Stub
+            view.displayTurnStart(activePlayer + 1, players[activePlayer].handAsString(), lastDiscard); // TODO: Stub
 
             PlayingCards drawn = null;
             boolean discard = false;
             boolean keep = true;
 
-            switch (view.drawCard()) {
+            switch (view.drawCard()) {  // TODO: Ensure stock/discard has cards.
                 case 0 -> {
                     running = false;
                     continue; // Exit
@@ -93,8 +93,11 @@ public class GameController implements Controller {
 
                 last.setFaceUp();
                 deck.discard(last);
-            } else
+            } else {
                 deck.discard(drawn);
+
+                // TODO: If discard, allow to flip over one card.
+            }
 
             nextTurn();
         }

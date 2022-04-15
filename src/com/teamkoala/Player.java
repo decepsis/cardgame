@@ -36,7 +36,27 @@ public class Player {
             } while (!hand[row][col].faceDown);
             hand[row][col].setFaceUp();
         }
+    }
 
+    /**
+     * Returns the hand as a string.
+     *
+     * @return The hand represented as a string.
+     */
+    public String handAsString() {
+        StringBuilder out = new StringBuilder();
+        for (int r = 0; r < 2; r++) {
+            out.append("Row ").append(r + 1).append(": ");
+
+            for (int c = 0; c < 3; c++) {
+                out.append(hand[r][c]);
+
+                if (r != 1 || c != 2)
+                    out.append("; ");
+            }
+        }
+
+        return out.toString();
     }
 }
 

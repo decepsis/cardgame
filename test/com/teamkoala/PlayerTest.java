@@ -44,6 +44,24 @@ public class PlayerTest {
     }
 
     /**
+     * Tests the handAsString() function.
+     */
+    @Test
+    void handAsString() {
+        Player player = new Player(new Deck(3));
+        PlayingCards[][] hand = player.hand;
+
+        for (int r = 0; r < 2; r++) {
+            for (int c = 0; c < 3; c++) {
+                hand[r][c] = new PlayingCards("test", r * 3 + c, r == 1 && c == 2);
+            }
+        }
+
+        assertEquals("Row 1: 0 of test; Ace of test; 2 of test; Row 2: 3 of test; 4 of test; Face down",
+                player.handAsString(), "handAsString did not return precomputed string.");
+    }
+
+    /**
      * Reflectively gets the stock pile of a Deck.
      *
      * @param deck Deck to get the stock pile from.
