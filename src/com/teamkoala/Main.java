@@ -1,17 +1,21 @@
 package com.teamkoala;
 
 /**
- * Holds driver for the cardgame application.
+ * Holds driver for the golf application.
  *
- * @version Lab 4
+ * @version Lab 6
  */
 public class Main {
 
     /**
-     * Entry point for cardgame application.
-     * Currently empty as there is nothing to run.
+     * Entry point for golf application.
      *
      * @param args Command line arguments
      */
-    public static void main(String[] args) {}
+    public static void main(String[] args) {
+        CLIView view = new CLIView();
+        TitleController ctrl = new TitleController(view);
+
+        while (ctrl.process()) {}
+    }
 }
