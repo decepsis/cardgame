@@ -146,4 +146,32 @@ public class CLIView implements View {
 
         return (col - 1) + ((row - 1) *  3);
     }
+
+    /**
+     * Asks the player if they want to flip a card over.
+     *
+     * @return Card the player would like to flip over or -1.
+     */
+    @Override
+    public int askFlip() {
+        System.out.println("You may flip a card over. Enter the row or 0 to skip:");
+        int row = input.nextInt();
+        while (row > 2 || row < 0) {
+            System.out.println("Please select a row between 1 and 2.");
+            row = input.nextInt();
+        }
+
+        if (row == 0)
+            return -1;
+
+        System.out.println("Column: ");
+        int col = input.nextInt();
+
+        while (col > 3 || col < 1) {
+            System.out.println("Please select a column between 1 and 3.");
+            col = input.nextInt();
+        }
+
+        return (col - 1) + ((row - 1) *  3);
+    }
 }

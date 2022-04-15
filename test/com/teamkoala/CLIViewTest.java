@@ -100,20 +100,20 @@ class CLIViewTest {
         printer.println(0);
 
         // Now, we should have returned.
-        int num = assertTimeoutPreemptively(Duration.ofMillis(50), view::getNumberOfPlayers, "getNumberOfPlayers ignored special value and timed out.");
+        int num = assertTimeoutPreemptively(Duration.ofMillis(100), view::getNumberOfPlayers, "getNumberOfPlayers ignored special value and timed out.");
         assertEquals(0, num, "getNumberOfPlayers did not return special value. May have returned out of bounds.");
         fixPipe();
 
         // Test boundary closure
         printer.println(2);
 
-        num = assertTimeoutPreemptively(Duration.ofMillis(50), view::getNumberOfPlayers, "getNumberOfPlayers ignored boundary value.");
+        num = assertTimeoutPreemptively(Duration.ofMillis(100), view::getNumberOfPlayers, "getNumberOfPlayers ignored boundary value.");
         assertEquals(2, num, "getNumberOfPlayers did not return boundary value.");
         fixPipe();
 
         printer.println(8);
 
-        num = assertTimeoutPreemptively(Duration.ofMillis(50), view::getNumberOfPlayers, "getNumberOfPlayers ignored boundary value.");
+        num = assertTimeoutPreemptively(Duration.ofMillis(100), view::getNumberOfPlayers, "getNumberOfPlayers ignored boundary value.");
         assertEquals(8, num, "getNumberOfPlayers did not return boundary value.");
         fixPipe();
 
@@ -162,39 +162,39 @@ class CLIViewTest {
 
         printer.println("-1");
         printer.println("0");
-        int value = assertTimeoutPreemptively(Duration.ofMillis(50), () -> view.drawCard(true, true), "drawCard did not return first value.");
+        int value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.drawCard(true, true), "drawCard did not return first value.");
         assertEquals(0, value, "drawCard did not correctly return first value.");
 
         fixPipe();
 
         printer.println("1");
-        value = assertTimeoutPreemptively(Duration.ofMillis(50), () -> view.drawCard(true, true), "drawCard did not return second value.");
+        value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.drawCard(true, true), "drawCard did not return second value.");
         assertEquals(1, value, "drawCard did not correctly return second value.");
 
         fixPipe();
 
         printer.println("3");
         printer.println("2");
-        value = assertTimeoutPreemptively(Duration.ofMillis(50), () -> view.drawCard(true, true), "drawCard did not return third value.");
+        value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.drawCard(true, true), "drawCard did not return third value.");
         assertEquals(2, value, "drawCard did not correctly return third value.");
 
         fixPipe();
 
         printer.println("2");
         printer.println("0");
-        value = assertTimeoutPreemptively(Duration.ofMillis(50), () -> view.drawCard(true, false), "drawCard did not return without discard.");
+        value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.drawCard(true, false), "drawCard did not return without discard.");
         assertEquals(0, value, "drawCard did not correctly return without discard.");
 
         fixPipe();
 
         printer.println("1");
         printer.println("0");
-        value = assertTimeoutPreemptively(Duration.ofMillis(50), () -> view.drawCard(false, true), "drawCard did not return without stock.");
+        value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.drawCard(false, true), "drawCard did not return without stock.");
         assertEquals(0, value, "drawCard did not correctly return without stock.");
 
         fixPipe();
 
-        value = assertTimeoutPreemptively(Duration.ofMillis(50), () -> view.drawCard(false, false), "drawCard did not return without cards.");
+        value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.drawCard(false, false), "drawCard did not return without cards.");
         assertEquals(0, value, "drawCard did not correctly return without cards.");
 
         assertEquals(String.join(String.format("%n"), expected), fakeOut.toString(), "drawCard did not output correctly.");
@@ -224,14 +224,14 @@ class CLIViewTest {
 
         printer.println("0");
         printer.println("1");
-        boolean value = assertTimeoutPreemptively(Duration.ofMillis(50), () -> view.askKeep(card1), "drawCard did not return first value.");
+        boolean value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.askKeep(card1), "drawCard did not return first value.");
         assertTrue(value, "drawCard did not correctly return first value.");
 
         fixPipe();
 
         printer.println("3");
         printer.println("2");
-        value = assertTimeoutPreemptively(Duration.ofMillis(50), () -> view.askKeep(card2), "drawCard did not return second value.");
+        value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.askKeep(card2), "drawCard did not return second value.");
         assertFalse(value, "drawCard did not correctly return second value.");
 
         assertEquals(String.join(String.format("%n"), expected), fakeOut.toString(), "drawCard did not output correctly.");
@@ -272,23 +272,82 @@ class CLIViewTest {
         printer.println("0");
         printer.println("4");
         printer.println("1");
-        int value = assertTimeoutPreemptively(Duration.ofMillis(50), () -> view.askReplace(card), "askReplace did not return first value.");
+        int value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.askReplace(card), "askReplace did not return first value.");
         assertEquals(0, value, "askReplace did not correctly return first value.");
 
         fixPipe();
 
         printer.println("2");
         printer.println("3");
-        value = assertTimeoutPreemptively(Duration.ofMillis(50), () -> view.askReplace(card), "askReplace did not return second value.");
+        value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.askReplace(card), "askReplace did not return second value.");
         assertEquals(5, value, "askReplace did not correctly return second value.");
 
         fixPipe();
 
         printer.println("1");
         printer.println("2");
-        value = assertTimeoutPreemptively(Duration.ofMillis(50), () -> view.askReplace(card), "askReplace did not return third value.");
+        value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.askReplace(card), "askReplace did not return third value.");
         assertEquals(1, value, "askReplace did not correctly return third value.");
 
         assertEquals(String.join(String.format("%n"), expected), fakeOut.toString(), "askReplace did not output correctly.");
+    }
+
+    /**
+     * Tests the askFlip() function I/O.
+     */
+    @Test
+    void askFlip() throws IOException, NoSuchFieldException, IllegalAccessException {
+        final String query = "You may flip a card over. Enter the row or 0 to skip:";
+        final String colQuery = "Column: ";
+        final String rowError = "Please select a row between 1 and 2.";
+        final String colError = "Please select a column between 1 and 3.";
+
+        final String[] expected = {
+                query,
+                rowError,
+                rowError,
+                colQuery,
+                colError,
+                colError,
+                query,
+                colQuery,
+                query,
+                colQuery,
+                query,
+                ""
+        };
+
+        final PlayingCards card = new PlayingCards("Heart", 6, false);
+
+        printer.println("-1");
+        printer.println("3");
+        printer.println("1");
+        printer.println("0");
+        printer.println("4");
+        printer.println("1");
+        int value = assertTimeoutPreemptively(Duration.ofMillis(100), view::askFlip, "askFlip did not return first value.");
+        assertEquals(0, value, "askFlip did not correctly return first value.");
+
+        fixPipe();
+
+        printer.println("2");
+        printer.println("3");
+        value = assertTimeoutPreemptively(Duration.ofMillis(100), view::askFlip, "askFlip did not return second value.");
+        assertEquals(5, value, "askFlip did not correctly return second value.");
+
+        fixPipe();
+
+        printer.println("1");
+        printer.println("2");
+        value = assertTimeoutPreemptively(Duration.ofMillis(100), view::askFlip, "askFlip did not return third value.");
+        assertEquals(1, value, "askFlip did not correctly return third value.");
+
+        fixPipe();
+
+        printer.println("0");
+        value = assertTimeoutPreemptively(Duration.ofMillis(100), view::askFlip, "askFlip did not return the skip value.");
+        assertEquals(-1, value, "askFlip did not correctly return the skip value.");
+
+        assertEquals(String.join(String.format("%n"), expected), fakeOut.toString(), "askFlip did not output correctly.");
     }
 }

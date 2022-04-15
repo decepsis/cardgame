@@ -102,7 +102,19 @@ public class GameController implements Controller {
             } else {
                 deck.discard(drawn);
 
-                // TODO: If discard, allow to flip over one card.
+                final int index = view.askFlip();
+
+                if (index > 5 || index < -1) {
+                    logger.warning("Impossible value returned from the view.");
+                    return true;
+                }
+
+                if (index != -1) {
+                    final int row = index / 3;
+                    final int col = index % 3;
+
+                    players[activePlayer].hand[row][col].setFaceUp();
+                }
             }
 
             nextTurn();

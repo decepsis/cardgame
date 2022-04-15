@@ -17,12 +17,14 @@ class GameControllerTest {
      */
     @Test
     void invalid() {
-        GameController ctrl = fromArrays(new int[]{ 2, 3, 1, 1 }, new boolean[]{ true, true }, new int[]{ -1, 6 });
+        GameController ctrl = fromArrays(new int[]{ 2, 3, 1, 1, 1, 1 }, new boolean[]{ true, true, false, false }, new int[]{ -1, 6 }, new int[]{ -2, 6 });
 
         assertTrue(ctrl.process(), "GameController did not correctly error when asked to draw from empty pile.");
         assertTrue(ctrl.process(), "GameController did not correctly error when given invalid draw decision.");
         assertTrue(ctrl.process(), "GameController did not correctly error when given too small a hand index.");
         assertTrue(ctrl.process(), "GameController did not correctly error when given too big a hand index.");
+        assertTrue(ctrl.process(), "GameController did not correctly error when given too small a flip index.");
+        assertTrue(ctrl.process(), "GameController did not correctly error when given too big a flip index.");
     }
 
     /**
@@ -32,7 +34,7 @@ class GameControllerTest {
      */
     @Test
     void drawCards() throws NoSuchFieldException, IllegalAccessException {
-        GameController ctrl = fromArrays(new int[]{ 1, 0, 2, 0 }, new boolean[]{ false }, new int[]{ 0 });
+        GameController ctrl = fromArrays(new int[]{ 1, 0, 2, 0 }, new boolean[]{ false }, new int[]{ 0 }, new int[]{ -1 });
 
         Deck deck = getField(ctrl, "deck");
         Player[] players = getField(ctrl, "players");
@@ -60,17 +62,34 @@ class GameControllerTest {
     }
 
     /**
+     * Tests the flip after discard functionality.
+     */
+    @Test
+    void flip() throws NoSuchFieldException, IllegalAccessException {
+        GameController ctrl = fromArrays(new int[]{ 1, 1, 0 }, new boolean[]{ false }, new int[]{}, new int[]{ -1, 0 });
+
+        Player[] players = getField(ctrl, "players");
+        PlayingCards secondCard = players[1].hand[0][0];
+        secondCard.setFaceDown();
+
+        // Note: -1 should either error for one of several reasons if not handled correctly, we can detect the throw.
+        assertFalse(ctrl.process(), "GameController did not correctly exit when testing flip.");
+        assertFalse(secondCard.faceDown, "GameController did not correctly flip second player's card.");
+    }
+
+    /**
      * Generates a controller that returns from arrays.
      *
      * @param drawReturn Array to return from in drawCard().
      * @param keepReturn Array to return from in askKeep().
      * @return GameController with TestView that returns from arrays.
      */
-    private GameController fromArrays(int[] drawReturn, boolean[] keepReturn, int[] replaceReturn) {
+    private GameController fromArrays(int[] drawReturn, boolean[] keepReturn, int[] replaceReturn, int[] flipReturn) {
         return new GameController(new TestView() {
             private int drawIndex = 0;
             private int keepIndex = 0;
             private int returnIndex = 0;
+            private int flipIndex = 0;
 
             @Override
             public int drawCard(boolean stockHasCards, boolean discardHasCards) {
@@ -92,6 +111,14 @@ class GameControllerTest {
             public int askReplace(PlayingCards drawn) {
                 int ret = replaceReturn[returnIndex++];
                 returnIndex %= replaceReturn.length;
+
+                return ret;
+            }
+
+            @Override
+            public int askFlip() {
+                int ret = flipReturn[flipIndex++];
+                flipIndex %= flipReturn.length;
 
                 return ret;
             }

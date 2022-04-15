@@ -51,4 +51,11 @@ public interface View {
      * @return If the player keeps the card.
      */
     boolean askKeep(PlayingCards drawn);
+
+    /**
+     * Asks the player if they want to flip a card over.
+     *
+     * @return Card the player would like to flip over or -1.
+     */
+    int askFlip();
 }

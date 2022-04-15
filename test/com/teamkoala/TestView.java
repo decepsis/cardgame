@@ -31,4 +31,9 @@ class TestView implements View {
     public boolean askKeep(PlayingCards drawn) {
         throw new IllegalStateException("TestView does not use this method");
     }
+
+    @Override
+    public int askFlip() {
+        throw new IllegalStateException("TestView does not use this method");
+    }
 }
