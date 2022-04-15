@@ -38,6 +38,8 @@ public class MainTest {
 
         // Just double check and ensure all caught messages are logged, in case JUnit has a fit.
         System.out.print(fakeOut);
+
+        printer.close();
     }
 
     /**

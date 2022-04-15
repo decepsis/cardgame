@@ -38,6 +38,9 @@ class CLIViewTest {
      * Why is this a seperate method? Java has weird pipe behavior with threads.
      */
     private void fixPipe() throws NoSuchFieldException, IOException, IllegalAccessException {
+        if (printer != null)
+            printer.close();
+
         fakeIn = new PipedOutputStream();
         printer = new PrintStream(fakeIn);
 
@@ -56,6 +59,8 @@ class CLIViewTest {
 
         // Just double check and ensure all caught messages are logged, in case JUnit has a fit.
         System.out.print(fakeOut);
+
+        printer.close();
     }
 
     /**
