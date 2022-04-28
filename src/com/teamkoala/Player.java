@@ -5,7 +5,7 @@ import java.util.Scanner;
 /**
  * Represents a player of the game.
  *
- * @version 1.0
+ * @version Lab 7
  */
 public class Player {
     /**
@@ -57,6 +57,34 @@ public class Player {
         }
 
         return out.toString();
+    }
+
+    /**
+     * Discards the player's entire hand.
+     * <br><br>
+     * Note: This invalidates the player's object, continued use is dangerous.
+     *
+     * @param deck The deck to discard the cards into.
+     */
+    public void discardHand(Deck deck) {
+        for (PlayingCards[] row: hand)
+            for (PlayingCards card: row)
+                deck.discard(card);
+    }
+
+    /**
+     * Scores the player's entire hand.
+     *
+     * @return The hand's score.
+     */
+    public int scoreHand() {
+        int score = 0;
+
+        for (PlayingCards[] row: hand)
+            for (PlayingCards card: row)
+                score += card.getCardScore();
+
+        return score;
     }
 }
 

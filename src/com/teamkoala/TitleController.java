@@ -34,7 +34,7 @@ public class TitleController implements Controller {
             if (players == 0)
                 return false;
 
-            running = new GameController(this.view, players).process();
+            running = new GameController(this.view, players, 1).process(); // TODO
         }
 
         return false;

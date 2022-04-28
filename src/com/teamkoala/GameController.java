@@ -6,17 +6,20 @@ import java.util.logging.Logger;
 /**
  * Controls the game view and uses the appropriate models.
  *
- * @version Lab 6
+ * @version Lab 7
  */
 public class GameController implements Controller {
     private final static Logger logger = Logger.getLogger("Koala-Golf");
 
     private final View view;
     private final Player[] players;
+    private final int[] scores;
     private final Deck deck;
 
     private int activePlayer = 0;
-    private boolean running = true;
+
+    private int hole = 0;
+    private final int holes;
 
     /**
      * Creates a new GameController from a given GameView and number of players.
@@ -24,14 +27,17 @@ public class GameController implements Controller {
      * @param view GameView to use to display the game.
      * @param players Number of players to create for the game.
      */
-    public GameController(View view, int players) {
+    public GameController(View view, int players, int holes) {
         this.view = view;
         this.players = new Player[players];
+        this.scores = new int[players];
+        this.holes = holes;
 
         deck = new Deck(players);
 
         for (int i = 0; i < players; i++) {
             this.players[i] = new Player(deck);
+            this.scores[i] = 0;
         }
     }
 
@@ -44,24 +50,60 @@ public class GameController implements Controller {
     }
 
     /**
+     * Checks if the player hand is fully flipped.
+     */
+    private boolean checkHand() {
+        final Player player = players[activePlayer];
+
+        for (PlayingCards[] row: player.hand)
+            for (PlayingCards card: row)
+                if (card.faceDown)
+                    return false;
+
+        return true;
+    }
+
+    /**
+     * Ends the current hole and progresses.
+     */
+    private void nextHole() {
+        hole++;
+
+        for (int i = 0; i < players.length; i++) {
+            Player player = players[i];
+            scores[i] = player.scoreHand();
+            player.discardHand(deck);
+        }
+
+        deck.reset();
+
+        activePlayer = hole % players.length;
+
+        for (int i = 0; i < players.length; i++)
+            players[(i + hole) % players.length] = new Player(deck);
+    }
+
+    /**
      * Performs game play loop.
      * @return If the program should continue running.
      */
     @Override
     public boolean process() {
-        while (running) { // Each iteration is a turn
+        while (hole < holes) { // Each iteration is a turn
             PlayingCards lastDiscard = deck.discardSize() != 0 ? deck.peekDiscard() : null;
-            view.displayTurnStart(activePlayer + 1, players[activePlayer].handAsString(), lastDiscard); // TODO: Stub
+
+            final Player player = players[activePlayer];
+
+            view.displayTurnStart(activePlayer + 1, player.handAsString(), lastDiscard);
 
             PlayingCards drawn = null;
             boolean discard = false;
             boolean keep = true;
 
             try {
-                switch (view.drawCard(deck.stockSize() > 0, deck.discardSize() > 0)) {  // TODO: Ensure stock/discard has cards.
+                switch (view.drawCard(deck.stockSize() > 0, deck.discardSize() > 0)) {
                     case 0 -> {
-                        running = false;
-                        continue; // Exit
+                        return false;
                     }
                     case 1 -> drawn = deck.drawCard();
                     case 2 -> {
@@ -94,8 +136,8 @@ public class GameController implements Controller {
                 final int row = index / 3;
                 final int col = index % 3;
 
-                PlayingCards last = players[activePlayer].hand[row][col];
-                players[activePlayer].hand[row][col] = drawn;
+                PlayingCards last = player.hand[row][col];
+                player.hand[row][col] = drawn;
 
                 last.setFaceUp();
                 deck.discard(last);
@@ -116,18 +158,22 @@ public class GameController implements Controller {
                     final int row = index / 3;
                     final int col = index % 3;
 
-                    PlayingCards card = players[activePlayer].hand[row][col];
+                    PlayingCards card = player.hand[row][col];
 
                     if (card.faceDown) {
-                        players[activePlayer].hand[row][col].setFaceUp();
+                        player.hand[row][col].setFaceUp();
                         break;
                     }
                 }
             }
 
-            nextTurn();
+            // Most turns have a card flipped up, though not all.
+            if (checkHand())
+                nextHole();
+            else
+                nextTurn();
         }
 
-        return false;
+        return true;
     }
 }
