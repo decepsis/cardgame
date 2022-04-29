@@ -5,7 +5,7 @@ import java.util.Scanner;
 /**
  * CLIView which extends the View class to contain user inputs and outputs
  *
- * @version Lab 6
+ * @version Lab 7
  */
 public class CLIView implements View {
     private final Scanner input = new Scanner(System.in);
@@ -34,6 +34,27 @@ public class CLIView implements View {
                 num = num1;
             } else {
                 System.out.println("Please enter valid number of players.");
+            }
+        }
+
+        return num;
+    }
+
+    /**
+     * Query the user for the number of holes to play.
+     *
+     * @return Number of holes.
+     */
+    public int queryHoles() {
+        int num = -1;
+        while (num == -1) {
+            System.out.print("Enter the number of holes to play: ");
+
+            int num1 = input.nextInt();
+            if (num1 >= 0) {
+                num = num1;
+            } else {
+                System.out.println("Please enter a positive or zero number of holes.");
             }
         }
 

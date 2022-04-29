@@ -15,7 +15,7 @@ class TitleControllerTest {
      */
     @Test
     void startGame() {
-        TitleController ctrl = withParams(1, true);
+        TitleController ctrl = withParams(1, 1, true);
 
         assertThrows(TraceException.class, ctrl::process, "TitleController did not appear pass to GameController.");
     }
@@ -25,10 +25,13 @@ class TitleControllerTest {
      */
     @Test
     void exit() {
-        TitleController ctrl = withParams(0, false);
+        TitleController ctrl = withParams(0, 1, false);
         assertFalse(ctrl.process(), "TitleController did not exit properly.");
 
-        ctrl = withParams(1, false);
+        ctrl = withParams(1, 0, false);
+        assertFalse(ctrl.process(), "TitleController did not exit properly.");
+
+        ctrl = withParams(1, 1,false);
         assertFalse(ctrl.process(), "TitleController did not exit from GameController properly.");
     }
 
@@ -39,11 +42,16 @@ class TitleControllerTest {
      * @param throwOnGame Whether to throw or exit when entering GameController.
      * @return New TitleController with specified view.
      */
-    private TitleController withParams(int numPlayers, boolean throwOnGame) {
+    private TitleController withParams(int numPlayers, int numHoles, boolean throwOnGame) {
         return new TitleController(new TestView() {
             @Override
             public int getNumberOfPlayers() {
                 return numPlayers;
+            }
+
+            @Override
+            public int queryHoles() {
+                return numHoles;
             }
 
             @Override

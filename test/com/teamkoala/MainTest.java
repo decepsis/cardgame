@@ -49,7 +49,7 @@ public class MainTest {
     void testEntry() {
         printer.println("0");
 
-        assertTimeoutPreemptively(Duration.ofMillis(100), () -> Main.main(null), "main did not return.");
+        assertTimeoutPreemptively(Duration.ofSeconds(5), () -> Main.main(null), "main did not return.");
 
         assertEquals("~~~~~~~~~~~~Welcome to the game!~~~~~~~~~~~~",
                 fakeOut.toString().lines().findFirst().orElse("").trim(),
