@@ -185,6 +185,9 @@ public class GameController implements Controller {
             int temp = input.nextInt();
             if(temp == 1){
                 view.displayScoreboard();
+                for (int i = 0; i < players.length; i++) {
+                    System.out.println("Player " + (i + 1) + " score: " + players[i].scoreFaceCard());
+                }
                 nextTurn();
             }
             else {

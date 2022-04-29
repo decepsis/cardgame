@@ -1,6 +1,5 @@
 package com.teamkoala;
 import java.util.Random;
-import java.util.Scanner;
 
 /**
  * Represents a player of the game.
@@ -12,6 +11,7 @@ public class Player {
      * Declaring variables to store information
      */
     public PlayingCards[][] hand;
+
 
     /**
      * Constructor to initialize a player. The player has a hand of two rows of three cards.
@@ -84,6 +84,21 @@ public class Player {
             for (PlayingCards card: row)
                 score += card.getCardScore();
 
+        return score;
+    }
+
+    /**
+     * Returns score for player's current hand only for cards that are faced up
+     * @return
+     */
+    public int scoreFaceCard() {
+        int score = 0;
+
+        for (PlayingCards[] row: hand)
+            for (PlayingCards card: row)
+                if (card.isFaceDown()) {
+                    score += card.getCardScore();
+                }
         return score;
     }
 }
