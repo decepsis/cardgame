@@ -1,6 +1,7 @@
 package com.teamkoala;
 
 import java.util.NoSuchElementException;
+import java.util.Scanner;
 import java.util.logging.Logger;
 
 /**
@@ -10,7 +11,7 @@ import java.util.logging.Logger;
  */
 public class GameController implements Controller {
     private final static Logger logger = Logger.getLogger("Koala-Golf");
-
+    private final Scanner input = new Scanner(System.in);
     private final View view;
     private final Player[] players;
     private final int[] scores;
@@ -69,6 +70,8 @@ public class GameController implements Controller {
     private void nextHole() {
         hole++;
 
+        getHoleNum();
+
         for (int i = 0; i < players.length; i++) {
             Player player = players[i];
             scores[i] = player.scoreHand();
@@ -81,6 +84,17 @@ public class GameController implements Controller {
 
         for (int i = 0; i < players.length; i++)
             players[(i + hole) % players.length] = new Player(deck);
+
+    }
+
+    /**
+     * Getter to get and count the hole number upon the execution of nextHole().
+     * @return
+     */
+    public static int getHoleNum(){
+        int holeCounter = 0;
+        holeCounter++;
+        return holeCounter;
     }
 
     /**
@@ -167,11 +181,20 @@ public class GameController implements Controller {
                 }
             }
 
-            // Most turns have a card flipped up, though not all.
-            if (checkHand())
-                nextHole();
-            else
+            System.out.println("1: View scoreboard; 0: Continue");
+            int temp = input.nextInt();
+            if(temp == 1){
+                view.displayScoreboard();
                 nextTurn();
+            }
+            else {
+                // Most turns have a card flipped up, though not all.
+                if (checkHand())
+                    nextHole();
+                else
+                    nextTurn();
+            }
+
         }
 
         return true;

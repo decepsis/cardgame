@@ -178,4 +178,16 @@ public class CLIView implements View {
 
         return (col - 1) + ((row - 1) *  3);
     }
+
+    /**
+     * Displays the Stats after each hand if the user wants
+     */
+    @Override
+    public void displayScoreboard() {
+        int holeC = GameController.getHoleNum();
+        System.out.println("The current hole is: " + holeC);
+
+    }
+
+
 }
