@@ -122,6 +122,25 @@ class CLIViewTest {
     }
 
     /**
+     * Tests the output of queryHoles().
+     */
+    @Test
+    void queryHoles() {
+        final String prompt = "Enter the number of holes to play: ";
+        final String error = "Please enter a positive or zero number of holes." + System.lineSeparator();
+        final String[] expected = { prompt, error, prompt };
+        final String expectedStr = String.join("", expected);
+
+        printer.println(-1);
+        printer.println(5);
+
+        int num = assertTimeoutPreemptively(Duration.ofSeconds(5), view::queryHoles, "queryHoles ignored valid value and timed out.");
+        assertEquals(5, num, "queryHoles did not return right value.");
+
+        assertEquals(expectedStr, fakeOut.toString(), "Expected output mismatch.");
+    }
+
+    /**
      * Tests the output of displayTurnStart().
      */
     @Test

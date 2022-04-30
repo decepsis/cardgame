@@ -20,6 +20,7 @@ public class GameController implements Controller {
     private int activePlayer = 0;
 
     private int hole = 0;
+
     private final int holes;
 
     /**
@@ -184,6 +185,7 @@ public class GameController implements Controller {
             System.out.println("1: View scoreboard; 0: Continue");
             int temp = input.nextInt();
             if(temp == 1){
+                System.out.println("The total number of holes: " + holes);
                 view.displayScoreboard();
                 for (int i = 0; i < players.length; i++) {
                     System.out.println("Player " + (i + 1) + " score: " + players[i].scoreFaceCard());
