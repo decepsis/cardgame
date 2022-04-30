@@ -248,7 +248,7 @@ public class GameController implements Controller {
      */
     void displayWinner(ArrayList<Player> players) {
         ArrayList<Player> temp = new ArrayList<Player>();
-        for(int i = 0; i<players.size();i++){
+        for(int i = 0; i<players.size(); i++){
             temp.add(i, players.get(i));
         }
         temp.sort(new SortbyScore());
