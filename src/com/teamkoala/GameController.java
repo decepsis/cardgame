@@ -1,7 +1,6 @@
 package com.teamkoala;
 
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -187,9 +186,7 @@ public class GameController implements Controller {
             if(temp == 1){
                 System.out.println("The total number of holes: " + holes);
                 view.displayScoreboard();
-                for (int i = 0; i < players.length; i++) {
-                    System.out.println("Player " + (i + 1) + " score: " + players[i].scoreFaceCard());
-                }
+                displayScores(getPlayers());
                 nextTurn();
             }
             else {
@@ -203,5 +200,43 @@ public class GameController implements Controller {
         }
 
         return true;
+    }
+
+    /**
+     * Class to help sort scores
+     */
+    class SortbyScore implements Comparator<Player> {
+        public int compare(Player a, Player b)
+        {
+            return a.scoreFaceCard() - b.scoreFaceCard();
+        }
+    }
+
+    /**
+     * Displays player's scores in ascending order if the user wants the scoreboard. Meant to be in CLIView but can't figure out how to implement it there.
+     * @param players
+     */
+    public void displayScores(ArrayList<Player> players) {
+        ArrayList<Player> temp = new ArrayList<Player>();
+
+        for(int i = 0; i<players.size(); i++){
+            temp.add(i, players.get(i));
+        }
+
+        temp.sort(new SortbyScore());
+
+        System.out.println("The Scores are:");
+        for(int i = 0; i < players.size(); i++){
+            System.out.println("Player " + (players.indexOf(temp.get(i))+1) + "'s Score: " + temp.get(i).returnScore());
+        }
+    }
+
+    /**
+     * Converts players array to an arraylist
+     * @return
+     */
+    public ArrayList<Player> getPlayers() {
+        List<Player> pl = new ArrayList<>(Arrays.asList(players));
+        return (ArrayList<Player>) pl;
     }
 }
