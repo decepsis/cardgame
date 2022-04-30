@@ -198,6 +198,8 @@ public class GameController implements Controller {
             }
 
         }
+        // Displays the winner
+        displayWinner(getPlayers());
 
         return true;
     }
@@ -238,5 +240,18 @@ public class GameController implements Controller {
     public ArrayList<Player> getPlayers() {
         List<Player> pl = new ArrayList<>(Arrays.asList(players));
         return (ArrayList<Player>) pl;
+    }
+
+    /**
+     * Displays the winner after a game is complete
+     * @param players
+     */
+    void displayWinner(ArrayList<Player> players) {
+        ArrayList<Player> temp = new ArrayList<Player>();
+        for(int i = 0; i<players.size();i++){
+            temp.add(i, players.get(i));
+        }
+        temp.sort(new SortbyScore());
+        System.out.println("The winner is: Player " + (players.indexOf(temp.get(0))+1));
     }
 }
