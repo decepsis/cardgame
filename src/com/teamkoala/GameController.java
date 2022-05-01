@@ -253,5 +253,6 @@ public class GameController implements Controller {
         }
         temp.sort(new SortbyScore());
         System.out.println("The winner is: Player " + (players.indexOf(temp.get(0))+1));
+        System.out.println("~~~~~~~~~~~~End of game!~~~~~~~~~~~~");
     }
 }

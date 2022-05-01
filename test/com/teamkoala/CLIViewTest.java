@@ -181,39 +181,39 @@ class CLIViewTest {
 
         printer.println("-1");
         printer.println("0");
-        int value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.drawCard(true, true), "drawCard did not return first value.");
+        int value = assertTimeoutPreemptively(Duration.ofMillis(5), () -> view.drawCard(true, true), "drawCard did not return first value.");
         assertEquals(0, value, "drawCard did not correctly return first value.");
 
         fixPipe();
 
         printer.println("1");
-        value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.drawCard(true, true), "drawCard did not return second value.");
+        value = assertTimeoutPreemptively(Duration.ofMillis(5), () -> view.drawCard(true, true), "drawCard did not return second value.");
         assertEquals(1, value, "drawCard did not correctly return second value.");
 
         fixPipe();
 
         printer.println("3");
         printer.println("2");
-        value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.drawCard(true, true), "drawCard did not return third value.");
+        value = assertTimeoutPreemptively(Duration.ofMillis(5), () -> view.drawCard(true, true), "drawCard did not return third value.");
         assertEquals(2, value, "drawCard did not correctly return third value.");
 
         fixPipe();
 
         printer.println("2");
         printer.println("0");
-        value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.drawCard(true, false), "drawCard did not return without discard.");
+        value = assertTimeoutPreemptively(Duration.ofMillis(5), () -> view.drawCard(true, false), "drawCard did not return without discard.");
         assertEquals(0, value, "drawCard did not correctly return without discard.");
 
         fixPipe();
 
         printer.println("1");
         printer.println("0");
-        value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.drawCard(false, true), "drawCard did not return without stock.");
+        value = assertTimeoutPreemptively(Duration.ofMillis(5), () -> view.drawCard(false, true), "drawCard did not return without stock.");
         assertEquals(0, value, "drawCard did not correctly return without stock.");
 
         fixPipe();
 
-        value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.drawCard(false, false), "drawCard did not return without cards.");
+        value = assertTimeoutPreemptively(Duration.ofMillis(5), () -> view.drawCard(false, false), "drawCard did not return without cards.");
         assertEquals(0, value, "drawCard did not correctly return without cards.");
 
         assertEquals(String.join(String.format("%n"), expected), fakeOut.toString(), "drawCard did not output correctly.");

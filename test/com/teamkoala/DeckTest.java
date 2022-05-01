@@ -125,12 +125,17 @@ public class DeckTest {
      */
     private void reset(boolean isRetry) {
         final PlayingCards card = deck.drawCard();
+
+        card.setFaceUp();
+
         deck.discard(card);
 
         final int before = deck.stockSize();
         final int discarded = deck.discardSize();
 
         deck.reset();
+
+        assertTrue(card.faceDown, "Reset did not flip all cards down");
 
         final int after = deck.stockSize();
 
