@@ -2,6 +2,8 @@ package com.teamkoala;
 
 /**
  * Represents a View.
+ *
+ * @version Lab 7
  */
 public interface View {
     /**

@@ -5,7 +5,7 @@ import java.util.Scanner;
 /**
  * CLIView which extends the View class to contain user inputs and outputs
  *
- * @version Lab 6
+ * @version Lab 7
  */
 public class CLIView implements View {
     private final Scanner input = new Scanner(System.in);

@@ -15,6 +15,11 @@ class TestView implements View {
     }
 
     @Override
+    public int queryHoles() {
+        throw new IllegalStateException("TestView does not use this method");
+    }
+
+    @Override
     public void displayTurnStart(int player, String hand, PlayingCards lastDiscard) {}
 
     @Override
@@ -34,11 +39,6 @@ class TestView implements View {
 
     @Override
     public int askFlip(boolean wasFlipped) {
-        throw new IllegalStateException("TestView does not use this method");
-    }
-
-    @Override
-    public int queryHoles() {
         throw new IllegalStateException("TestView does not use this method");
     }
 }
