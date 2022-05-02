@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Tests the Player class.
  *
- * @version Lab 6
+ * @version Lab 7
  */
 public class PlayerTest {
     /**
@@ -59,6 +59,37 @@ public class PlayerTest {
 
         assertEquals("Row 1: 0 of test; Ace of test; 2 of test; Row 2: 3 of test; 4 of test; Face down",
                 player.handAsString(), "handAsString did not return precomputed string.");
+    }
+
+    /**
+     * Tests the discardHand function.
+     */
+    @Test
+    void discardHand() {
+        Deck deck = new Deck(3);
+        Player player = new Player(deck);
+
+        player.discardHand(deck);
+
+        assertEquals(6, deck.discardSize(), "Player did not discard all cards.");
+        for (int r = 1; r >= 0; r--)
+            for (int c = 2; c >= 0; c--)
+                assertEquals(player.hand[r][c], deck.drawDiscard(), "Discard order is unexpected, skipped cards?");
+    }
+
+    /**
+     * Tests the scoring function.
+     */
+    @Test
+    void scoreHand() {
+        Player player = new Player(new Deck(3));
+
+        int score = 0;
+        for (PlayingCards[] row: player.hand)
+            for (PlayingCards card: row)
+                score += card.getCardScore();
+
+        assertEquals(score, player.scoreHand(), "Computed and returned scores are different.");
     }
 
     /**

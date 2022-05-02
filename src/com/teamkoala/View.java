@@ -2,6 +2,8 @@ package com.teamkoala;
 
 /**
  * Represents a View.
+ *
+ * @version Lab 7
  */
 public interface View {
     /**
@@ -15,6 +17,13 @@ public interface View {
      * @return Number of players.
      */
     int getNumberOfPlayers();
+
+    /**
+     * Query the user for the number of holes to play.
+     *
+     * @return Number of holes.
+     */
+    int queryHoles();
 
     /**
      * Display the present player's turn.

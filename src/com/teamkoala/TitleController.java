@@ -34,7 +34,12 @@ public class TitleController implements Controller {
             if (players == 0)
                 return false;
 
-            running = new GameController(this.view, players).process();
+            final int holes = view.queryHoles();
+
+            if (holes == 0)
+                return false;
+
+            running = new GameController(this.view, players, holes).process();
         }
 
         return false;

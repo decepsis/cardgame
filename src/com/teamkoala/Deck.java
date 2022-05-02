@@ -120,6 +120,10 @@ public class Deck {
      */
     public void reset() {
         stock.addAll(discard);
+
+        for (PlayingCards card : discard)
+            card.setFaceDown();
+
         discard.clear();
 
         Collections.shuffle(stock, generator);
