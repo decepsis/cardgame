@@ -17,6 +17,13 @@ public interface View {
     int getNumberOfPlayers();
 
     /**
+     * Query the user for the number of holes to play.
+     *
+     * @return Number of holes.
+     */
+    int queryHoles();
+
+    /**
      * Display the present player's turn.
      *
      * @param playerTurn Player whose turn it is.
@@ -59,4 +66,5 @@ public interface View {
      * @return Card the player would like to flip over or -1.
      */
     int askFlip(boolean wasFlipped);
+
 }

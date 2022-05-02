@@ -41,6 +41,27 @@ public class CLIView implements View {
     }
 
     /**
+     * Query the user for the number of holes to play.
+     *
+     * @return Number of holes.
+     */
+    public int queryHoles() {
+        int num = -1;
+        while (num == -1) {
+            System.out.print("Enter the number of holes to play: ");
+
+            int num1 = input.nextInt();
+            if (num1 >= 0) {
+                num = num1;
+            } else {
+                System.out.println("Please enter a positive or zero number of holes.");
+            }
+        }
+
+        return num;
+    }
+
+    /**
      * Displays current player's turn, their current hand and the last discarded card
      * @param playerTurn Number of the current player.
      * @param playerHand String version of the player's hand.
@@ -49,10 +70,10 @@ public class CLIView implements View {
     //Story 4
     @Override
     public void displayTurnStart(int playerTurn, String playerHand, PlayingCards lastDiscard) {
-        System.out.println("Player " + playerTurn + "'s turn. Player's hand: " + playerHand);
+        System.out.println("Player " + playerTurn + "'s turn. \nPlayer's hand: " + playerHand);
 
         if (lastDiscard != null)
-            System.out.println("Last discarded card: " + lastDiscard);
+            System.out.print("Last discarded card: " + lastDiscard + "\n");
         else
             System.out.println("Discard is empty");
     }
@@ -70,7 +91,7 @@ public class CLIView implements View {
         int temp = 0;
 
         if (stockHasCards && !discardHasCards) {
-            System.out.println("Press 1 to draw a card from the stock pile or 0 to exit.");
+            System.out.print("Press 1 to draw a card from the stock pile or 0 to exit: ");
 
             temp = input.nextInt();
             while (temp != 1 && temp != 0) {
@@ -78,7 +99,7 @@ public class CLIView implements View {
                 temp = input.nextInt();
             }
         } else if (!stockHasCards && discardHasCards) {
-            System.out.println("Press 2 to draw the last discarded card or 0 to exit.");
+            System.out.print("Press 2 to draw the last discarded card or 0 to exit.: ");
 
             temp = input.nextInt();
             while (temp != 2 && temp != 0) {
@@ -108,7 +129,7 @@ public class CLIView implements View {
     @Override
     public boolean askKeep(PlayingCards drawn) {
         System.out.println("The card drawn from the deck is: " + drawn);
-        System.out.println("Press 1 to keep the card or 2 to discard it");
+        System.out.print("Press 1 to keep the card or 2 to discard it: ");
 
         int temp = input.nextInt();
         while (temp != 1 && temp != 2) {
@@ -128,7 +149,7 @@ public class CLIView implements View {
     @Override
     public int askReplace(PlayingCards drawn) {
         System.out.println("Select the row and column of the card you want replaced.");
-        System.out.println("Row: ");
+        System.out.print("Row: ");
         int row = input.nextInt();
 
         while (row > 2 || row < 1) {
@@ -136,7 +157,7 @@ public class CLIView implements View {
             row = input.nextInt();
         }
 
-        System.out.println("Column: ");
+        System.out.print("Column: ");
         int col = input.nextInt();
 
         while (col > 3 || col < 1) {
@@ -178,4 +199,7 @@ public class CLIView implements View {
 
         return (col - 1) + ((row - 1) *  3);
     }
+
+
+
 }

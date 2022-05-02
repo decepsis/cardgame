@@ -1,17 +1,18 @@
 package com.teamkoala;
 import java.util.Random;
-import java.util.Scanner;
 
 /**
  * Represents a player of the game.
  *
- * @version 1.0
+ * @version Lab 7
  */
 public class Player {
     /**
      * Declaring variables to store information
      */
     public PlayingCards[][] hand;
+    public int score = 0;
+
 
     /**
      * Constructor to initialize a player. The player has a hand of two rows of three cards.
@@ -58,5 +59,55 @@ public class Player {
 
         return out.toString();
     }
-}
 
+    /**
+     * Discards the player's entire hand.
+     * <br><br>
+     * Note: This invalidates the player's object, continued use is dangerous.
+     *
+     * @param deck The deck to discard the cards into.
+     */
+    public void discardHand(Deck deck) {
+        for (PlayingCards[] row: hand)
+            for (PlayingCards card: row)
+                deck.discard(card);
+    }
+
+    /**
+     * Scores the player's entire hand.
+     *
+     * @return The hand's score.
+     */
+    public int scoreHand() {
+        score = 0;
+
+        for (PlayingCards[] row: hand)
+            for (PlayingCards card: row)
+                score += card.getCardScore();
+
+        return score;
+    }
+
+    /**
+     * Returns score for player's current hand only for cards that are faced up
+     * @return
+     */
+    public int scoreFaceCard() {
+        int score = 0;
+
+        for (PlayingCards[] row: hand)
+            for (PlayingCards card: row)
+                if (!card.isFaceDown()) {
+                    score += card.getCardScore();
+                }
+        return score;
+    }
+
+    /**
+     * Just returns scoreFaceCard(). This just makes displayScores work.
+     * @return
+     */
+    public int returnScore(){
+        return scoreFaceCard();
+    }
+}

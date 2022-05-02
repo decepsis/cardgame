@@ -17,7 +17,7 @@ public class Deck {
     static final SecureRandom seeder; // Slightly unnecessary.
     static Logger logger = Logger.getLogger("Koala-Golf");
 
-    /*
+    /**
      * Initializes the seeder for the generators.
      *
      * Basically impossible to test.
@@ -120,6 +120,10 @@ public class Deck {
      */
     public void reset() {
         stock.addAll(discard);
+
+        for (PlayingCards card : discard)
+            card.setFaceDown();
+
         discard.clear();
 
         Collections.shuffle(stock, generator);

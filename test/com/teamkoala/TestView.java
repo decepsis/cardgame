@@ -11,7 +11,7 @@ class TestView implements View {
 
     @Override
     public int getNumberOfPlayers() {
-       throw new IllegalStateException("TestView does not use this method");
+        throw new IllegalStateException("TestView does not use this method");
     }
 
     @Override
@@ -34,6 +34,11 @@ class TestView implements View {
 
     @Override
     public int askFlip(boolean wasFlipped) {
+        throw new IllegalStateException("TestView does not use this method");
+    }
+
+    @Override
+    public int queryHoles() {
         throw new IllegalStateException("TestView does not use this method");
     }
 }

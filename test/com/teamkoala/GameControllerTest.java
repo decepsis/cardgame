@@ -48,7 +48,6 @@ class GameControllerTest {
         assertEquals(1, deck.discardSize(), "GameController did not correctly discard card.");
 
         setField(ctrl, "activePlayer", 0);
-        setField(ctrl, "running", true);
 
         PlayingCards toDraw = deck.peekDiscard();
 
@@ -79,6 +78,17 @@ class GameControllerTest {
         // Additionally, if GameController does not correctly retry after the second card is already flipped, it will not flip the first.
         assertFalse(ctrl.process(), "GameController did not correctly exit when testing flip.");
         assertFalse(firstCard.faceDown, "GameController did not correctly flip second player's card.");
+    }
+
+    /**
+     * Tests the hole progression functionality.
+     *
+     * The scoring algorithm is so simple that we'll ignore it until we get to player.
+     */
+    @Test
+    void nextHole() {
+        GameController ctrl = fromArrays(new int[]{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 }, new boolean[]{ false }, new int[]{}, new int[]{ 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5 });
+        assertTrue(ctrl.process(), "GameController did not correctly end the game at the last hole.");
     }
 
     /**
@@ -126,7 +136,7 @@ class GameControllerTest {
 
                 return ret;
             }
-        }, 3);
+        }, 3, 1);
     }
 
     /**
