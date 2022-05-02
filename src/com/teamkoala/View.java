@@ -67,11 +67,4 @@ public interface View {
      */
     int askFlip(boolean wasFlipped);
 
-    /**
-     * Displays user stats at the end of a hand
-     */
-    void displayScoreboard();
-
-
-
 }

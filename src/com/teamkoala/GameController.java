@@ -16,6 +16,8 @@ public class GameController implements Controller {
     private final int[] scores;
     private final Deck deck;
 
+    private int holeCounter = 1;
+
     private int activePlayer = 0;
 
     private int hole = 0;
@@ -70,7 +72,7 @@ public class GameController implements Controller {
     private void nextHole() {
         hole++;
 
-        getHoleNum();
+        System.out.println("\n~~Starting next hole~~\n");
 
         for (int i = 0; i < players.length; i++) {
             Player player = players[i];
@@ -85,16 +87,6 @@ public class GameController implements Controller {
         for (int i = 0; i < players.length; i++)
             players[(i + hole) % players.length] = new Player(deck);
 
-    }
-
-    /**
-     * Getter to get and count the hole number upon the execution of nextHole().
-     * @return
-     */
-    public static int getHoleNum(){
-        int holeCounter = 0;
-        holeCounter++;
-        return holeCounter;
     }
 
     /**
@@ -184,15 +176,22 @@ public class GameController implements Controller {
             System.out.println("1: View scoreboard; 0: Continue");
             int temp = input.nextInt();
             if(temp == 1){
+                System.out.println("The current hole is: " + holeCounter);
                 System.out.println("The total number of holes: " + holes);
-                view.displayScoreboard();
                 displayScores(getPlayers());
-                nextTurn();
+                if (checkHand()) {
+                    holeCounter++;
+                    nextHole();
+                }
+                else
+                    nextTurn();
             }
             else {
                 // Most turns have a card flipped up, though not all.
-                if (checkHand())
+                if (checkHand()) {
+                    holeCounter++;
                     nextHole();
+                }
                 else
                     nextTurn();
             }

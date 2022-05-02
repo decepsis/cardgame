@@ -38,11 +38,6 @@ class TestView implements View {
     }
 
     @Override
-    public void displayScoreboard() {
-        throw new IllegalStateException("TestView does not use this method");
-    }
-
-    @Override
     public int queryHoles() {
         throw new IllegalStateException("TestView does not use this method");
     }
