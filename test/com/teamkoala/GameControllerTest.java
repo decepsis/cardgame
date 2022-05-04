@@ -17,7 +17,7 @@ class GameControllerTest {
      */
     @Test
     void invalid() {
-        GameController ctrl = fromArrays(new int[]{ 2, 3, 1, 1, 1, 1 }, new boolean[]{ true, true, false, false }, new int[]{ -1, 6 }, new int[]{ -2, 6 });
+        GameController ctrl = fromArrays(new int[]{ 2, 3, 1, 1, 1, 1 }, new boolean[]{ true, true, false, false }, new int[]{ -1, 6 }, new int[]{ -2, 6 }, new boolean[]{});
 
         assertTrue(ctrl.process(), "GameController did not correctly error when asked to draw from empty pile.");
         assertTrue(ctrl.process(), "GameController did not correctly error when given invalid draw decision.");
@@ -34,7 +34,7 @@ class GameControllerTest {
      */
     @Test
     void drawCards() throws NoSuchFieldException, IllegalAccessException {
-        GameController ctrl = fromArrays(new int[]{ 1, 0, 2, 0 }, new boolean[]{ false }, new int[]{ 0 }, new int[]{ -1 });
+        GameController ctrl = fromArrays(new int[]{ 1, 0, 2, 0 }, new boolean[]{ false }, new int[]{ 0 }, new int[]{ -1 }, new boolean[]{false});
 
         Deck deck = getField(ctrl, "deck");
         Player[] players = getField(ctrl, "players");
@@ -65,7 +65,7 @@ class GameControllerTest {
      */
     @Test
     void flip() throws NoSuchFieldException, IllegalAccessException {
-        GameController ctrl = fromArrays(new int[]{ 1, 1, 0 }, new boolean[]{ false }, new int[]{}, new int[]{ -1, 1, 0 });
+        GameController ctrl = fromArrays(new int[]{ 1, 1, 0 }, new boolean[]{ false }, new int[]{}, new int[]{ -1, 1, 0 }, new boolean[]{true});
 
         Player[] players = getField(ctrl, "players");
         PlayingCards firstCard = players[1].hand[0][0];
@@ -87,7 +87,7 @@ class GameControllerTest {
      */
     @Test
     void nextHole() {
-        GameController ctrl = fromArrays(new int[]{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 }, new boolean[]{ false }, new int[]{}, new int[]{ 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5 });
+        GameController ctrl = fromArrays(new int[]{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 }, new boolean[]{ false }, new int[]{}, new int[]{ 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5 }, new boolean[]{false});
         assertTrue(ctrl.process(), "GameController did not correctly end the game at the last hole.");
     }
 
@@ -96,14 +96,18 @@ class GameControllerTest {
      *
      * @param drawReturn Array to return from in drawCard().
      * @param keepReturn Array to return from in askKeep().
+     * @param replaceReturn Array to return from askReplace().
+     * @param flipReturn Array to return from askFlip().
+     * @param scoreboard Array to return from showScoreboard().
      * @return GameController with TestView that returns from arrays.
      */
-    private GameController fromArrays(int[] drawReturn, boolean[] keepReturn, int[] replaceReturn, int[] flipReturn) {
+    private GameController fromArrays(int[] drawReturn, boolean[] keepReturn, int[] replaceReturn, int[] flipReturn, boolean[] scoreboard) {
         return new GameController(new TestView() {
             private int drawIndex = 0;
             private int keepIndex = 0;
             private int returnIndex = 0;
             private int flipIndex = 0;
+            private int scoreboardIndex = 0;
 
             @Override
             public int drawCard(boolean stockHasCards, boolean discardHasCards) {
@@ -133,6 +137,14 @@ class GameControllerTest {
             public int askFlip(boolean wasFlipped) {
                 int ret = flipReturn[flipIndex++];
                 flipIndex %= flipReturn.length;
+
+                return ret;
+            }
+
+            @Override
+            public boolean viewScoreboard() {
+                boolean ret = scoreboard[scoreboardIndex++];
+                scoreboardIndex %= scoreboard.length;
 
                 return ret;
             }

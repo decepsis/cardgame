@@ -1,6 +1,6 @@
 package com.teamkoala;
 
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * CLIView which extends the View class to contain user inputs and outputs
@@ -70,7 +70,7 @@ public class CLIView implements View {
     //Story 4
     @Override
     public void displayTurnStart(int playerTurn, String playerHand, PlayingCards lastDiscard) {
-        System.out.println("Player " + playerTurn + "'s turn. \nPlayer's hand: " + playerHand);
+        System.out.println("Player " + playerTurn + "'s turn.\nPlayer's hand: " + playerHand);
 
         if (lastDiscard != null)
             System.out.print("Last discarded card: " + lastDiscard + "\n");
@@ -99,7 +99,7 @@ public class CLIView implements View {
                 temp = input.nextInt();
             }
         } else if (!stockHasCards && discardHasCards) {
-            System.out.print("Press 2 to draw the last discarded card or 0 to exit.: ");
+            System.out.print("Press 2 to draw the last discarded card or 0 to exit: ");
 
             temp = input.nextInt();
             while (temp != 2 && temp != 0) {
@@ -200,6 +200,61 @@ public class CLIView implements View {
         return (col - 1) + ((row - 1) *  3);
     }
 
+    /**
+     * Asks the player if they want to view the scoreboard.
+     *
+     * @return If the player wants to view the scoreboard.
+     */
+    @Override
+    public boolean viewScoreboard() {
+        System.out.println("1: View scoreboard; 0: Continue");
 
+        while (true) {
+            int temp = input.nextInt();
 
+            if (temp == 1 || temp == 0)
+                return temp == 1;
+        }
+    }
+
+    /**
+     * Shows the current scoreboard
+     *
+     * @param players Current players
+     */
+    @Override
+    public void showScoreboard(Player[] players, int holes, int hole) {
+        System.out.println("The current hole is: " + hole);
+        System.out.println("The total number of holes: " + holes);
+
+        List<Player> asList = Arrays.asList(players);
+        ArrayList<Player> temp = new ArrayList<>();
+        Collections.addAll(temp, players);
+
+        temp.sort(Comparator.comparingInt(Player::scoreFaceCard));
+
+        System.out.println("The Scores are:");
+        for(int i = 0; i < players.length; i++){
+            System.out.println("Player " + (asList.indexOf(temp.get(i))+1) + "'s Score: " + temp.get(i).scoreFaceCard());
+        }
+    }
+
+    /**
+     * Displays the winner after a game is complete
+     * @param scores The final scores.
+     */
+    @Override
+    public void displayWinner(int[] scores) {
+        ArrayList<Integer> asList = new ArrayList<>();
+        ArrayList<Integer> temp = new ArrayList<>();
+
+        for (int score : scores) {
+            temp.add(score);
+            asList.add(score);
+        }
+
+        temp.sort(Comparator.naturalOrder());
+        System.out.println("The winner is: Player " + (asList.indexOf(temp.get(0))+1));
+        System.out.println("~~~~~~~~~~~~End of game!~~~~~~~~~~~~");
+    }
 }

@@ -101,13 +101,5 @@ public class Player {
                 }
         return score;
     }
-
-    /**
-     * Just returns scoreFaceCard(). This just makes displayScores work.
-     * @return
-     */
-    public int returnScore(){
-        return scoreFaceCard();
-    }
 }
 

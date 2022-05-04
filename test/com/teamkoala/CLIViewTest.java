@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -145,8 +147,8 @@ class CLIViewTest {
      */
     @Test
     void displayTurnStart() {
-        final String format = "Player %d's turn. Player's hand: %s%n";
-        final String discardFormat = "Last discarded card: %s%n";
+        final String format = "Player %d's turn.\nPlayer's hand: %s%n";
+        final String discardFormat = "Last discarded card: %s\n";
         final String emptyDiscard = String.format("Discard is empty%n");
 
         view.displayTurnStart(999, "fakehand1", null);
@@ -170,53 +172,53 @@ class CLIViewTest {
      */
     @Test
     void drawCard() throws IOException, NoSuchFieldException, IllegalAccessException {
-        final String queryFull = "Press 1 to draw a card from the stock pile, 2 to draw the last discarded card, or 0 to exit.";
-        final String queryStock = "Press 1 to draw a card from the stock pile or 0 to exit.";
-        final String queryDiscard = "Press 2 to draw the last discarded card or 0 to exit.";
-        final String queryEmpty = "There are no more cards left, we have to exit, sorry.";
-        final String errorFull = "Please only input 1, 2, or 0";
-        final String errorStock = "Please only input 1 or 0";
-        final String errorDiscard = "Please only input 2 or 0";
+        final String queryFull = "Press 1 to draw a card from the stock pile, 2 to draw the last discarded card, or 0 to exit." + System.lineSeparator();
+        final String queryStock = "Press 1 to draw a card from the stock pile or 0 to exit: ";
+        final String queryDiscard = "Press 2 to draw the last discarded card or 0 to exit: ";
+        final String queryEmpty = "There are no more cards left, we have to exit, sorry." + System.lineSeparator();
+        final String errorFull = "Please only input 1, 2, or 0" + System.lineSeparator();
+        final String errorStock = "Please only input 1 or 0" + System.lineSeparator();
+        final String errorDiscard = "Please only input 2 or 0" + System.lineSeparator();
         final String[] expected = { queryFull, errorFull, queryFull, queryFull, errorFull, queryStock, errorStock, queryDiscard, errorDiscard, queryEmpty, "" };
 
         printer.println("-1");
         printer.println("0");
-        int value = assertTimeoutPreemptively(Duration.ofMillis(5), () -> view.drawCard(true, true), "drawCard did not return first value.");
+        int value = assertTimeoutPreemptively(Duration.ofSeconds(5), () -> view.drawCard(true, true), "drawCard did not return first value.");
         assertEquals(0, value, "drawCard did not correctly return first value.");
 
         fixPipe();
 
         printer.println("1");
-        value = assertTimeoutPreemptively(Duration.ofMillis(5), () -> view.drawCard(true, true), "drawCard did not return second value.");
+        value = assertTimeoutPreemptively(Duration.ofSeconds(5), () -> view.drawCard(true, true), "drawCard did not return second value.");
         assertEquals(1, value, "drawCard did not correctly return second value.");
 
         fixPipe();
 
         printer.println("3");
         printer.println("2");
-        value = assertTimeoutPreemptively(Duration.ofMillis(5), () -> view.drawCard(true, true), "drawCard did not return third value.");
+        value = assertTimeoutPreemptively(Duration.ofSeconds(5), () -> view.drawCard(true, true), "drawCard did not return third value.");
         assertEquals(2, value, "drawCard did not correctly return third value.");
 
         fixPipe();
 
         printer.println("2");
         printer.println("0");
-        value = assertTimeoutPreemptively(Duration.ofMillis(5), () -> view.drawCard(true, false), "drawCard did not return without discard.");
+        value = assertTimeoutPreemptively(Duration.ofSeconds(5), () -> view.drawCard(true, false), "drawCard did not return without discard.");
         assertEquals(0, value, "drawCard did not correctly return without discard.");
 
         fixPipe();
 
         printer.println("1");
         printer.println("0");
-        value = assertTimeoutPreemptively(Duration.ofMillis(5), () -> view.drawCard(false, true), "drawCard did not return without stock.");
+        value = assertTimeoutPreemptively(Duration.ofSeconds(5), () -> view.drawCard(false, true), "drawCard did not return without stock.");
         assertEquals(0, value, "drawCard did not correctly return without stock.");
 
         fixPipe();
 
-        value = assertTimeoutPreemptively(Duration.ofMillis(5), () -> view.drawCard(false, false), "drawCard did not return without cards.");
+        value = assertTimeoutPreemptively(Duration.ofSeconds(5), () -> view.drawCard(false, false), "drawCard did not return without cards.");
         assertEquals(0, value, "drawCard did not correctly return without cards.");
 
-        assertEquals(String.join(String.format("%n"), expected), fakeOut.toString(), "drawCard did not output correctly.");
+        assertEquals(String.join("", expected), fakeOut.toString(), "drawCard did not output correctly.");
     }
 
     /**
@@ -224,9 +226,9 @@ class CLIViewTest {
      */
     @Test
     void askKeep() throws IOException, NoSuchFieldException, IllegalAccessException {
-        final String drawnFormat = "The card drawn from the deck is: %s";
-        final String query = "Press 1 to keep the card or 2 to discard it";
-        final String error = "Please only input 1 or 2.";
+        final String drawnFormat = "The card drawn from the deck is: %s" + System.lineSeparator();
+        final String query = "Press 1 to keep the card or 2 to discard it: ";
+        final String error = "Please only input 1 or 2." + System.lineSeparator();
 
         final PlayingCards card1 = new PlayingCards("Heart", 6, false);
         final PlayingCards card2 = new PlayingCards("Club", 8, false);
@@ -253,7 +255,7 @@ class CLIViewTest {
         value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.askKeep(card2), "drawCard did not return second value.");
         assertFalse(value, "drawCard did not correctly return second value.");
 
-        assertEquals(String.join(String.format("%n"), expected), fakeOut.toString(), "drawCard did not output correctly.");
+        assertEquals(String.join("", expected), fakeOut.toString(), "drawCard did not output correctly.");
     }
 
     /**
@@ -261,11 +263,11 @@ class CLIViewTest {
      */
     @Test
     void askReplace() throws IOException, NoSuchFieldException, IllegalAccessException {
-        final String query = "Select the row and column of the card you want replaced.";
+        final String query = "Select the row and column of the card you want replaced." + System.lineSeparator();
         final String rowQuery = "Row: ";
         final String colQuery = "Column: ";
-        final String rowError = "Please select a row between 1 and 2.";
-        final String colError = "Please select a column between 1 and 3.";
+        final String rowError = "Please select a row between 1 and 2." + System.lineSeparator();
+        final String colError = "Please select a column between 1 and 3." + System.lineSeparator();
         final String[] expected = {
                 query,
                 rowQuery,
@@ -308,7 +310,7 @@ class CLIViewTest {
         value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.askReplace(card), "askReplace did not return third value.");
         assertEquals(1, value, "askReplace did not correctly return third value.");
 
-        assertEquals(String.join(String.format("%n"), expected), fakeOut.toString(), "askReplace did not output correctly.");
+        assertEquals(String.join("", expected), fakeOut.toString(), "askReplace did not output correctly.");
     }
 
     /**
@@ -338,37 +340,97 @@ class CLIViewTest {
                 ""
         };
 
-        final PlayingCards card = new PlayingCards("Heart", 6, false);
-
         printer.println("-1");
         printer.println("3");
         printer.println("1");
         printer.println("0");
         printer.println("4");
         printer.println("1");
-        int value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.askFlip(false), "askFlip did not return first value.");
+        int value = assertTimeoutPreemptively(Duration.ofSeconds(5), () -> view.askFlip(false), "askFlip did not return first value.");
         assertEquals(0, value, "askFlip did not correctly return first value.");
 
         fixPipe();
 
         printer.println("2");
         printer.println("3");
-        value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.askFlip(false), "askFlip did not return second value.");
+        value = assertTimeoutPreemptively(Duration.ofSeconds(5), () -> view.askFlip(false), "askFlip did not return second value.");
         assertEquals(5, value, "askFlip did not correctly return second value.");
 
         fixPipe();
 
         printer.println("1");
         printer.println("2");
-        value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.askFlip(false), "askFlip did not return third value.");
+        value = assertTimeoutPreemptively(Duration.ofSeconds(5), () -> view.askFlip(false), "askFlip did not return third value.");
         assertEquals(1, value, "askFlip did not correctly return third value.");
 
         fixPipe();
 
         printer.println("0");
-        value = assertTimeoutPreemptively(Duration.ofMillis(100), () -> view.askFlip(true), "askFlip did not return the skip value.");
+        value = assertTimeoutPreemptively(Duration.ofSeconds(5), () -> view.askFlip(true), "askFlip did not return the skip value.");
         assertEquals(-1, value, "askFlip did not correctly return the skip value.");
 
         assertEquals(String.join(String.format("%n"), expected), fakeOut.toString(), "askFlip did not output correctly.");
+    }
+
+    /**
+     * Tests the viewScoreboard() function.
+     */
+    @Test
+    void viewScoreboard() throws IOException, NoSuchFieldException, IllegalAccessException {
+        final String query = "1: View scoreboard; 0: Continue" + System.lineSeparator();
+        final String[] expected = { query, query };
+
+        printer.println("-1");
+        printer.println("1");
+
+        boolean value = assertTimeoutPreemptively(Duration.ofSeconds(5), view::viewScoreboard, "viewScoreboard did not return first value.");
+        assertTrue(value, "viewScoreboard returned wrong first value.");
+
+        fixPipe();
+
+        printer.println("0");
+        value = assertTimeoutPreemptively(Duration.ofSeconds(5), view::viewScoreboard, "viewScoreboard did not return second value.");
+        assertFalse(value, "viewScoreboard returned wrong second value.");
+
+        assertEquals(String.join("", expected), fakeOut.toString(), "viewScoreboard did not output correctly.");
+    }
+
+    /**
+     * Tests the showScoreboard() function.
+     */
+    @Test
+    void showScoreboard() {
+        final String header = String.format("The current hole is: %d%nThe total number of holes: %d%n", 999, 555);
+        final String header2 = "The Scores are:" + System.lineSeparator();
+
+        final Deck deck = new Deck(2);
+        final Player[] players = { new Player(deck), new Player(deck) };
+
+        final String scoreList1 = String.format("Player 1's Score: %d%nPlayer 2's Score: %d%n",
+                players[0].scoreFaceCard(), players[1].scoreFaceCard());
+        final String scoreList2 = String.format("Player 2's Score: %d%nPlayer 1's Score: %d%n",
+                players[1].scoreFaceCard(), players[0].scoreFaceCard());
+        final String scoreList = players[0].scoreFaceCard() > players[1].scoreFaceCard() ? scoreList2 : scoreList1;
+
+        final String[] expected = { header, header2, scoreList };
+
+        view.showScoreboard(players, 555, 999);
+
+        assertEquals(String.join("", expected), fakeOut.toString(), "showScoreboard did not output correctly.");
+    }
+
+    /**
+     * Tests the displayWinner() function.
+     */
+    @Test
+    void displayWinner() {
+        final String winner = "The winner is: Player 2" + System.lineSeparator();
+        final String footer = "~~~~~~~~~~~~End of game!~~~~~~~~~~~~" + System.lineSeparator();
+
+        final String[] expected = { winner, footer };
+
+        view.displayWinner(new int[]{999, 111, 555});
+
+        assertEquals(String.join("", expected), fakeOut.toString(), "showScoreboard did not output correctly.");
     }
 }

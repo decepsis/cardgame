@@ -69,4 +69,24 @@ public interface View {
      */
     int askFlip(boolean wasFlipped);
 
+    /**
+     * Asks the player if they want to view the scoreboard.
+     *
+     * @return If the player wants to view the scoreboard.
+     */
+    boolean viewScoreboard();
+
+    /**
+     * Shows the current scoreboard.
+     *
+     * @param players Current players
+     */
+    void showScoreboard(Player[] players, int holes, int hole);
+
+    /**
+     * Displays the winner of the game.
+     *
+     * @param scores The final scores.
+     */
+    void displayWinner(int[] scores);
 }

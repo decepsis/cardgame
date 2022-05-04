@@ -65,12 +65,7 @@ public class PlayingCards {
      * @return
      */
     public boolean isFaceDown() {
-        if (!faceDown) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return !faceDown;
     }
 
     /**
