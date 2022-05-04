@@ -68,4 +68,5 @@ public interface View {
      * @return Card the player would like to flip over or -1.
      */
     int askFlip(boolean wasFlipped);
+
 }

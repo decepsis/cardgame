@@ -41,4 +41,9 @@ class TestView implements View {
     public int askFlip(boolean wasFlipped) {
         throw new IllegalStateException("TestView does not use this method");
     }
+
+    @Override
+    public int queryHoles() {
+        throw new IllegalStateException("TestView does not use this method");
+    }
 }

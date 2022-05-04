@@ -17,7 +17,7 @@ public class Deck {
     static final SecureRandom seeder; // Slightly unnecessary.
     static Logger logger = Logger.getLogger("Koala-Golf");
 
-    /*
+    /**
      * Initializes the seeder for the generators.
      *
      * Basically impossible to test.

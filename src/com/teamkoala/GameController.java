@@ -1,6 +1,6 @@
 package com.teamkoala;
 
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -10,15 +10,18 @@ import java.util.logging.Logger;
  */
 public class GameController implements Controller {
     private final static Logger logger = Logger.getLogger("Koala-Golf");
-
+    private final Scanner input = new Scanner(System.in);
     private final View view;
     private final Player[] players;
     private final int[] scores;
     private final Deck deck;
 
+    private int holeCounter = 1;
+
     private int activePlayer = 0;
 
     private int hole = 0;
+
     private final int holes;
 
     /**
@@ -69,6 +72,8 @@ public class GameController implements Controller {
     private void nextHole() {
         hole++;
 
+        System.out.println("\n~~Starting next hole~~\n");
+
         for (int i = 0; i < players.length; i++) {
             Player player = players[i];
             scores[i] = player.scoreHand();
@@ -81,6 +86,7 @@ public class GameController implements Controller {
 
         for (int i = 0; i < players.length; i++)
             players[(i + hole) % players.length] = new Player(deck);
+
     }
 
     /**
@@ -167,13 +173,85 @@ public class GameController implements Controller {
                 }
             }
 
-            // Most turns have a card flipped up, though not all.
-            if (checkHand())
-                nextHole();
-            else
-                nextTurn();
+            System.out.println("1: View scoreboard; 0: Continue");
+            int temp = input.nextInt();
+            if(temp == 1){
+                System.out.println("The current hole is: " + holeCounter);
+                System.out.println("The total number of holes: " + holes);
+                displayScores(getPlayers());
+                if (checkHand()) {
+                    holeCounter++;
+                    nextHole();
+                }
+                else
+                    nextTurn();
+            }
+            else {
+                // Most turns have a card flipped up, though not all.
+                if (checkHand()) {
+                    holeCounter++;
+                    nextHole();
+                }
+                else
+                    nextTurn();
+            }
+
         }
+        // Displays the winner
+        displayWinner(getPlayers());
 
         return true;
+    }
+
+    /**
+     * Class to help sort scores
+     */
+    class SortbyScore implements Comparator<Player> {
+        public int compare(Player a, Player b)
+        {
+            return a.scoreFaceCard() - b.scoreFaceCard();
+        }
+    }
+
+    /**
+     * Displays player's scores in ascending order if the user wants the scoreboard. Meant to be in CLIView but can't figure out how to implement it there.
+     * @param players
+     */
+    public void displayScores(ArrayList<Player> players) {
+        ArrayList<Player> temp = new ArrayList<Player>();
+
+        for(int i = 0; i<players.size(); i++){
+            temp.add(i, players.get(i));
+        }
+
+        temp.sort(new SortbyScore());
+
+        System.out.println("The Scores are:");
+        for(int i = 0; i < players.size(); i++){
+            System.out.println("Player " + (players.indexOf(temp.get(i))+1) + "'s Score: " + temp.get(i).returnScore());
+        }
+    }
+
+    /**
+     * Converts players array to an arraylist
+     * @return
+     */
+    public ArrayList<Player> getPlayers() {
+        List<Player> pl = new ArrayList<>(Arrays.asList(players));
+        return (ArrayList<Player>) pl;
+    }
+
+    /**
+     * Displays the winner after a game is complete
+     * @param players
+     */
+    void displayWinner(ArrayList<Player> players) {
+        ArrayList<Player> temp = new ArrayList<Player>();
+        for(int i = 0; i<players.size(); i++){
+            temp.add(i, players.get(i));
+        }
+        temp.sort(new SortbyScore());
+        System.out.println("The winner is: Player " + (players.indexOf(temp.get(0))+1));
+        System.out.println("~~~~~~~~~~~~End of game!~~~~~~~~~~~~");
     }
 }
