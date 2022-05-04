@@ -76,7 +76,7 @@ public class GameController implements Controller {
 
         for (int i = 0; i < players.length; i++) {
             Player player = players[i];
-            scores[i] = player.scoreHand();
+            scores[i] += player.scoreHand();
             player.discardHand(deck);
         }
 
@@ -184,10 +184,68 @@ public class GameController implements Controller {
             else
                 nextTurn();
         }
+        // Displays the winner
+        displayWinner(getPlayers());
 
         // Displays the winner
         view.displayWinner(scores);
 
         return true;
+    }
+
+    /**
+     * Class to help sort scores
+     */
+    class SortbyScore implements Comparator<Player> {
+        public int compare(Player a, Player b)
+        {
+            return a.scoreFaceCard() - b.scoreFaceCard();
+        }
+    }
+
+    /**
+     * Displays player's scores in ascending order if the user wants the scoreboard. Meant to be in CLIView but can't figure out how to implement it there.
+     * @param players
+     */
+    public void displayScores(ArrayList<Player> players) {
+        ArrayList<Player> temp = new ArrayList<Player>();
+
+        for(int i = 0; i < players.size(); i++){
+            temp.add(i, players.get(i));
+        }
+
+        temp.sort(new SortbyScore());
+
+        System.out.println("The Scores are:");
+        for(int i = 0; i < players.size(); i++){
+            System.out.println("Player " + (players.indexOf(temp.get(i))+1) + "'s Score: " + temp.get(i).returnScore());
+        }
+    }
+
+    /**
+     * Converts players array to an arraylist
+     * @return
+     */
+    public ArrayList<Player> getPlayers() {
+        List<Player> pl = new ArrayList<>(Arrays.asList(players));
+        return (ArrayList<Player>) pl;
+    }
+
+    /**
+     * Displays the winner after a game is complete
+     * @param players
+     */
+    void displayWinner(ArrayList<Player> players) {
+        ArrayList<Player> temp = new ArrayList<Player>();
+
+        for(int i = 0; i<players.size(); i++){
+            players.get(i).score = scores[i];
+            temp.add(i, players.get(i));
+        }
+        temp.sort(new SortbyScore());
+        System.out.println("The final scores are:");
+        displayScores(temp);
+        System.out.println("The winner is: Player " + (players.indexOf(temp.get(0))+1));
+        System.out.println("~~~~~~~~~~~~End of game!~~~~~~~~~~~~");
     }
 }

@@ -11,6 +11,8 @@ public class Player {
      * Declaring variables to store information
      */
     public PlayingCards[][] hand;
+    public int score = 0;
+
 
 
     /**
@@ -78,7 +80,7 @@ public class Player {
      * @return The hand's score.
      */
     public int scoreHand() {
-        int score = 0;
+        score = 0;
 
         for (PlayingCards[] row: hand)
             for (PlayingCards card: row)
@@ -103,3 +105,26 @@ public class Player {
     }
 }
 
+    /**
+     * Returns score for player's current hand only for cards that are faced up
+     * @return
+     */
+    public int scoreFaceCard() {
+        int score = 0;
+
+        for (PlayingCards[] row: hand)
+            for (PlayingCards card: row)
+                if (!card.isFaceDown()) {
+                    score += card.getCardScore();
+                }
+        return score;
+    }
+
+    /**
+     * Just returns scoreFaceCard(). This just makes displayScores work.
+     * @return
+     */
+    public int returnScore(){
+        return scoreFaceCard();
+    }
+}

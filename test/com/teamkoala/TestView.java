@@ -11,7 +11,7 @@ class TestView implements View {
 
     @Override
     public int getNumberOfPlayers() {
-       throw new IllegalStateException("TestView does not use this method");
+        throw new IllegalStateException("TestView does not use this method");
     }
 
     @Override

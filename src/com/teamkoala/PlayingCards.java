@@ -127,4 +127,8 @@ public class PlayingCards {
 
         return 0;
     }
+
+    public boolean isFaceDown() {
+        return faceDown;
+    }
 }
