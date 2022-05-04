@@ -173,32 +173,22 @@ public class GameController implements Controller {
                 }
             }
 
-            System.out.println("1: View scoreboard; 0: Continue");
-            int temp = input.nextInt();
-            if(temp == 1){
-                System.out.println("The current hole is: " + holeCounter);
-                System.out.println("The total number of holes: " + holes);
-                displayScores(getPlayers());
-                if (checkHand()) {
-                    holeCounter++;
-                    nextHole();
-                }
-                else
-                    nextTurn();
-            }
-            else {
-                // Most turns have a card flipped up, though not all.
-                if (checkHand()) {
-                    holeCounter++;
-                    nextHole();
-                }
-                else
-                    nextTurn();
-            }
+            if (view.viewScoreboard())
+                view.showScoreboard(players, holes, hole);
 
+            // Most turns have a card flipped up, though not all.
+            if (checkHand()) {
+                holeCounter++;
+                nextHole();
+            }
+            else
+                nextTurn();
         }
         // Displays the winner
         displayWinner(getPlayers());
+
+        // Displays the winner
+        view.displayWinner(scores);
 
         return true;
     }

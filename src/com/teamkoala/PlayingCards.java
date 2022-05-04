@@ -60,6 +60,15 @@ public class PlayingCards {
     }
 
     /**
+     * Returns true if a card is face down
+     *
+     * @return
+     */
+    public boolean isFaceDown() {
+        return !faceDown;
+    }
+
+    /**
      * Method to return if a card is face card or not
      * @return If the card is a face card.
      */

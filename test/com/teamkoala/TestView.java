@@ -41,4 +41,15 @@ class TestView implements View {
     public int askFlip(boolean wasFlipped) {
         throw new IllegalStateException("TestView does not use this method");
     }
+
+    @Override
+    public boolean viewScoreboard() {
+        throw new IllegalStateException("TestView does not use this method");
+    }
+
+    @Override
+    public void showScoreboard(Player[] players, int holes, int hole) {}
+
+    @Override
+    public void displayWinner(int[] scores) {}
 }

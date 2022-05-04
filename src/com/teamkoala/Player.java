@@ -14,6 +14,7 @@ public class Player {
     public int score = 0;
 
 
+
     /**
      * Constructor to initialize a player. The player has a hand of two rows of three cards.
      *
@@ -87,6 +88,22 @@ public class Player {
 
         return score;
     }
+
+    /**
+     * Returns score for player's current hand only for cards that are faced up
+     * @return
+     */
+    public int scoreFaceCard() {
+        int score = 0;
+
+        for (PlayingCards[] row: hand)
+            for (PlayingCards card: row)
+                if (card.isFaceDown()) {
+                    score += card.getCardScore();
+                }
+        return score;
+    }
+}
 
     /**
      * Returns score for player's current hand only for cards that are faced up

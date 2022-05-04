@@ -31,12 +31,14 @@ public class PlayingCardsTest {
     void faces() {
         assertTrue(fd.faceDown, "Face down card is not face down.");
         assertFalse(h6.faceDown, "Face up card is not face up.");
+        assertTrue(h6.isFaceDown(), "Face up card returned face down.");
 
         fd.setFaceUp();
         h6.setFaceDown();
 
         assertFalse(fd.faceDown, "Face down card did not flip.");
         assertTrue(h6.faceDown, "Face up card did not flip.");
+        assertFalse(h6.isFaceDown(), "Face up card returned face down.");
     }
 
     /**

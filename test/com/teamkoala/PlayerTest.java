@@ -85,11 +85,17 @@ public class PlayerTest {
         Player player = new Player(new Deck(3));
 
         int score = 0;
+        int scoreUp = 0;
         for (PlayingCards[] row: player.hand)
-            for (PlayingCards card: row)
+            for (PlayingCards card: row) {
                 score += card.getCardScore();
 
+                if (!card.faceDown)
+                    scoreUp += card.getCardScore();
+            }
+
         assertEquals(score, player.scoreHand(), "Computed and returned scores are different.");
+        assertEquals(scoreUp, player.scoreFaceCard(), "Computed and returned face up scores are different.");
     }
 
     /**
